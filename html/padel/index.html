@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VAYO · משחק</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans+Hebrew:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal: #6AEBD6;
+      --black: #060606;
+      --white: #f5f5f0;
+      --gray: #888;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'IBM Plex Sans Hebrew', 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-logo-img { height: 28px; filter: brightness(0) invert(1); }
+
+    /* DESKTOP BLOCK */
+    .desktop-block {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 32px;
+    }
+    .desktop-block .icon {
+      font-size: 64px;
+      margin-bottom: 32px;
+      opacity: 0.5;
+    }
+    .desktop-block h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(24px, 3vw, 40px);
+      letter-spacing: 0.06em;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+    .desktop-block p {
+      font-size: 18px;
+      color: var(--gray);
+      max-width: 420px;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+    .desktop-block .back-btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border: 1px solid var(--teal);
+      color: var(--teal);
+      text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      transition: background 0.2s, color 0.2s;
+    }
+    .desktop-block .back-btn:hover {
+      background: var(--teal);
+      color: var(--black);
+    }
+
+    /* MOBILE CONTENT */
+    .mobile-content {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .mobile-content .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+    .mobile-content h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 28px;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+    .mobile-content p {
+      color: var(--gray);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* SHOW/HIDE by screen width */
+    @media (min-width: 769px) {
+      .desktop-block  { display: flex; }
+      .mobile-content { display: none;  }
+    }
+    @media (max-width: 768px) {
+      .desktop-block  { display: none;  }
+      .mobile-content { display: flex;  }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/">
+      <img src="/images/vayo-logo.png" alt="VAYO" class="nav-logo-img" />
+    </a>
+  </nav>
+
+  <!-- DESKTOP: ACCESS DENIED -->
+  <div class="desktop-block">
+    <div class="icon">📱</div>
+    <h1>MOBILE ONLY</h1>
+    <p>המשחק זמין במובייל בלבד.<br />סרקו עם הטלפון או פתחו את הדף מהמכשיר שלכם.</p>
+    <a href="/" class="back-btn">← חזרה לאתר</a>
+  </div>
+
+  <!-- MOBILE: GAME CONTENT -->
+  <div class="mobile-content">
+    <div class="eyebrow">VAYO · GAME</div>
+    <h1>המשחק</h1>
+    <p>בקרוב.</p>
+  </div>
+
+</body>
+</html>

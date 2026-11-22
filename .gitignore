@@ -1,0 +1,9 @@
+# Customer data — never commit
+api/orders.json
+api/reservations.json
+api/__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db

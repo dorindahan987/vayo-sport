@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>פרטי הזמנה - VAYO</title>
+  <link rel="stylesheet" href="../css/style.css?v=14" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans+Hebrew:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1798460304676639');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1798460304676639&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+  <style>
+    .checkout-wrap {
+      min-height: 100vh;
+      padding: 120px 24px 80px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 48px;
+    }
+    .checkout-form-col {
+      flex: 1;
+      max-width: 520px;
+    }
+    .checkout-summary-col {
+      width: 300px;
+      flex-shrink: 0;
+    }
+    @media (max-width: 860px) {
+      .checkout-wrap { flex-direction: column; align-items: center; }
+      .checkout-summary-col { width: 100%; max-width: 520px; order: -1; }
+    }
+
+    .checkout-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: #6AEBD6;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .checkout-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin: 0 0 32px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: #555;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .form-group input {
+      width: 100%;
+      background: #0d0d0d;
+      border: 1px solid #222;
+      color: #e8e8e8;
+      font-family: 'Space Grotesk', 'IBM Plex Sans Hebrew', sans-serif;
+      font-size: 15px;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .form-group input:focus {
+      border-color: #6AEBD6;
+    }
+    .form-group input::placeholder { color: #333; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+
+    .checkout-divider {
+      height: 1px;
+      background: linear-gradient(90deg, #6AEBD6 0%, transparent 100%);
+      margin: 28px 0;
+    }
+
+    .terms-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .terms-check input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      margin-top: 2px;
+      accent-color: #6AEBD6;
+      cursor: pointer;
+    }
+    .terms-check label {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.7;
+      cursor: pointer;
+    }
+    .terms-check a {
+      color: #6AEBD6;
+      text-decoration: underline;
+    }
+
+    .btn-checkout {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background: #6AEBD6;
+      color: #060606;
+      font-family: 'Space Grotesk', 'IBM Plex Sans Hebrew', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-checkout:hover { opacity: 0.88; }
+    .btn-checkout:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ORDER SUMMARY */
+    .summary-box {
+      background: #0d0d0d;
+      border: 1px solid #1a1a1a;
+      padding: 28px 24px;
+    }
+    .summary-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: #444;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .summary-product {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #111;
+    }
+    .summary-product:last-of-type {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .summary-product img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      background: #111;
+    }
+    .summary-product-info { flex: 1; }
+    .summary-product-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .summary-product-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #555;
+      margin-top: 3px;
+    }
+    .summary-product-price {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: #6AEBD6;
+      white-space: nowrap;
+    }
+    .summary-items { margin-bottom: 16px; }
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #666;
+      padding: 8px 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .summary-line:last-child { border-bottom: none; }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 0 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+    .summary-total span:last-child { color: #6AEBD6; }
+
+    .summary-empty {
+      font-size: 13px;
+      color: #444;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .checkout-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: #444;
+      text-decoration: none;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .checkout-back:hover { color: #6AEBD6; }
+
+    .checkout-error {
+      background: #1a0a0a;
+      border: 1px solid #440000;
+      color: #ff6666;
+      font-size: 13px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .preorder-banner {
+      background: rgba(106,235,214,0.06);
+      border: 1px solid rgba(106,235,214,0.25);
+      padding: 14px 18px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .preorder-banner-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .preorder-banner-text { font-size: 13px; color: #aaa; line-height: 1.65; }
+    .preorder-banner-text strong { color: #6AEBD6; display: block; margin-bottom: 3px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+  <!-- CURSOR -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="../index.html" class="nav-logo">
+      <img src="../images/vayo-logo.png" alt="VAYO" class="nav-logo-img" />
+    </a>
+    <ul class="nav-center">
+      <li><a href="../index.html#products" data-i18n="nav_products">Products</a></li>
+      <li><a href="../index.html#about" data-i18n="nav_about">About</a></li>
+      <li><a href="../index.html#contact" data-i18n="nav_contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn active" data-lang="he">HE</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="mobile-menu">
+    <a href="../index.html#products" data-i18n="nav_products">Products</a>
+    <a href="../index.html#about" data-i18n="nav_about">About</a>
+    <a href="../index.html#contact" data-i18n="nav_contact">Contact</a>
+    <div class="mobile-lang">
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn active" data-lang="he">HE</button>
+    </div>
+  </div>
+
+  <div class="checkout-wrap">
+
+    <!-- FORM -->
+    <div class="checkout-form-col">
+      <a href="javascript:history.back()" class="checkout-back">← חזרה</a>
+
+      <div class="preorder-banner">
+        <div class="preorder-banner-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6AEBD6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27,6.96 12,12.01 20.73,6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+        <div class="preorder-banner-text">
+          <strong>רכישה מוקדמת</strong>
+          המלאי הראשון כבר בדרך אלינו ונשלח לכם ישירות מרגע הגעתו למחסן. תשלומך מאובטח עכשיו.
+        </div>
+      </div>
+
+      <div class="checkout-eyebrow">שלב 1 מתוך 2</div>
+      <h1 class="checkout-title">פרטי הלקוח</h1>
+
+      <div class="checkout-error" id="checkout-error"></div>
+
+      <form id="checkout-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">שם פרטי</label>
+            <input type="text" id="fname" name="fname" placeholder="ישראל" required />
+          </div>
+          <div class="form-group">
+            <label for="lname">שם משפחה</label>
+            <input type="text" id="lname" name="lname" placeholder="ישראלי" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">דואר אלקטרוני</label>
+          <input type="email" id="email" name="email" placeholder="email@example.com" required />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">טלפון</label>
+          <input type="tel" id="phone" name="phone" placeholder="050-0000000" required />
+        </div>
+
+        <div class="checkout-divider"></div>
+
+        <div class="form-group">
+          <label for="street">רחוב ומספר בית</label>
+          <input type="text" id="street" name="street" placeholder="הרצל 1" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">עיר</label>
+            <input type="text" id="city" name="city" placeholder="תל אביב" required />
+          </div>
+          <div class="form-group">
+            <label for="zip">מיקוד</label>
+            <input type="text" id="zip" name="zip" placeholder="6100000" />
+          </div>
+        </div>
+
+        <div class="checkout-divider"></div>
+
+        <div class="terms-check">
+          <input type="checkbox" id="terms-agree" required />
+          <label for="terms-agree">
+            קראתי ואני מסכים/ה ל<a href="terms.html" target="_blank">תקנון האתר</a> ולמדיניות הפרטיות, כולל תנאי האספקה והביטול.
+          </label>
+        </div>
+
+        <button type="submit" class="btn-checkout" id="btn-checkout" disabled>
+          המשך לתשלום →
+        </button>
+      </form>
+    </div>
+
+    <!-- ORDER SUMMARY -->
+    <div class="checkout-summary-col">
+      <div class="summary-box">
+        <div class="summary-label">סיכום הזמנה</div>
+
+        <div id="summary-items" class="summary-items">
+          <!-- populated by JS -->
+        </div>
+
+        <div id="summary-divider" style="height:1px;background:#1a1a1a;margin:16px 0;"></div>
+
+        <div class="summary-line">
+          <span>מוצרים</span>
+          <span id="summary-price">—</span>
+        </div>
+        <div class="summary-line">
+          <span>משלוח</span>
+          <span id="summary-shipping">30 ₪</span>
+        </div>
+        <div class="summary-total">
+          <span>סה"כ</span>
+          <span id="summary-total">—</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <img src="../images/vayo-logo.png" alt="VAYO" class="footer-logo-img" />
+        <div class="footer-sub mono-el">Engineered for Padel</div>
+      </div>
+      <div class="footer-links">
+        <a href="../index.html#products">Products</a>
+        <a href="terms.html">תקנון</a>
+      </div>
+      <div class="footer-contact">
+        <a href="tel:0543762043" class="footer-email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><span>054-376-2043</span></a>
+        <a href="mailto:vayo@blade-agency.net" class="footer-email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg><span>vayo@blade-agency.net</span></a>
+      </div>
+    </div>
+    <div class="footer-copy mono-el">© 2026 VAYO · ALL RIGHTS RESERVED</div>
+  </footer>
+
+  <script src="../js/main.js?v=6"></script>
+  <script src="../js/cart.js"></script>
+  <script>
+    // ── Cart summary ──────────────────────────────────────
+    const cart = JSON.parse(localStorage.getItem('vayo-cart') || '[]');
+    const SHIPPING = 30;
+
+    function buildSummary() {
+      const container = document.getElementById('summary-items');
+      const btn       = document.getElementById('btn-checkout');
+
+      if (cart.length === 0) {
+        container.innerHTML = '<div class="summary-empty">הסל ריק — חזור למוצרים</div>';
+        document.getElementById('summary-price').textContent = '—';
+        document.getElementById('summary-total').textContent = '—';
+        document.getElementById('summary-shipping').textContent = '—';
+        document.getElementById('summary-divider').style.display = 'none';
+        // Keep btn disabled regardless of checkbox
+        btn.disabled = true;
+        btn.style.opacity = '0.3';
+        return;
+      }
+
+      let subtotal = 0;
+      let html = '';
+      for (const item of cart) {
+        const lineTotal = item.price * item.qty;
+        subtotal += lineTotal;
+        html += `
+          <div class="summary-product">
+            <img src="${item.img || '../images/vayo-logo.png'}" alt="${item.name}" />
+            <div class="summary-product-info">
+              <div class="summary-product-name">${item.name}</div>
+              <div class="summary-product-sub">${item.variant ? item.variant + ' · ' : ''}כמות: ${item.qty}</div>
+            </div>
+            <div class="summary-product-price">${lineTotal} ₪</div>
+          </div>`;
+      }
+      container.innerHTML = html;
+      document.getElementById('summary-price').textContent    = subtotal + ' ₪';
+      document.getElementById('summary-shipping').textContent = SHIPPING + ' ₪';
+      document.getElementById('summary-total').textContent    = (subtotal + SHIPPING) + ' ₪';
+    }
+
+    buildSummary();
+
+    // ── Enable submit only when checkbox checked + cart not empty ──
+    const checkbox = document.getElementById('terms-agree');
+    const btn      = document.getElementById('btn-checkout');
+    checkbox.addEventListener('change', () => {
+      btn.disabled = !checkbox.checked || cart.length === 0;
+    });
+
+    // ── Form submit → Morning payment ─────────────────────
+    document.getElementById('checkout-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      if (cart.length === 0) return;
+
+      const errorEl = document.getElementById('checkout-error');
+      errorEl.style.display = 'none';
+
+      btn.disabled     = true;
+      btn.textContent  = 'מעבד...';
+
+      const fname  = document.getElementById('fname').value.trim();
+      const lname  = document.getElementById('lname').value.trim();
+      const email  = document.getElementById('email').value.trim();
+      const phone  = document.getElementById('phone').value.trim();
+      const street = document.getElementById('street').value.trim();
+      const city   = document.getElementById('city').value.trim();
+
+      if (!fname || !lname || !email || !phone || !street || !city) {
+        errorEl.textContent   = 'יש למלא את כל השדות הנדרשים.';
+        errorEl.style.display = 'block';
+        btn.disabled    = false;
+        btn.textContent = 'המשך לתשלום →';
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/payment', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items:    cart,
+            customer: {
+              name:    fname + ' ' + lname,
+              email:   email,
+              phone:   phone,
+              address: street + ', ' + city
+            }
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.url) {
+          // Save order ID so success page can confirm
+          if (data.order) sessionStorage.setItem('vayo-order', data.order);
+          window.location.href = data.url;
+        } else {
+          errorEl.textContent   = 'שגיאה בעיבוד התשלום. אנא נסה שוב.';
+          errorEl.style.display = 'block';
+          btn.disabled    = false;
+          btn.textContent = 'המשך לתשלום →';
+        }
+      } catch (err) {
+        errorEl.textContent   = 'שגיאת חיבור. בדוק חיבור לאינטרנט ונסה שוב.';
+        errorEl.style.display = 'block';
+        btn.disabled    = false;
+        btn.textContent = 'המשך לתשלום →';
+      }
+    });
+  </script>
+</body>
+</html>
