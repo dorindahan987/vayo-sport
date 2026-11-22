@@ -7,3 +7,5 @@ api/__pycache__/
 # OS
 .DS_Store
 Thumbs.db
+html/images/hero.mov
+html/images/hero.mp4
