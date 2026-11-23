@@ -9,22 +9,26 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #0e0e10;
-      --surface:  #18181c;
-      --surface2: #1f1f24;
-      --border:   #2a2a30;
-      --border2:  #333340;
-      --text:     #f0f0f0;
-      --text-sub: #a0a0b0;
-      --text-dim: #6a6a7a;
-      --accent:   #6AEBD6;
-      --accent-bg:rgba(106,235,214,0.08);
-      --blue:     #6ab0eb;
-      --blue-bg:  rgba(106,176,235,0.08);
-      --yellow:   #f0c060;
-      --yellow-bg:rgba(240,192,96,0.08);
-      --red:      #e87070;
-      --red-bg:   rgba(232,112,112,0.08);
+      --bg:          #0b0b0d;
+      --surface:     #141418;
+      --surface2:    #1c1c22;
+      --surface3:    #222228;
+      --border:      #26262e;
+      --border2:     #32323c;
+      --text:        #f2f2f2;
+      --text-sub:    #9898ac;
+      --text-dim:    #58586a;
+
+      /* Status colors */
+      --green:       #4de89a;
+      --green-bg:    rgba(77,232,154,0.08);
+      --green-border:rgba(77,232,154,0.25);
+      --orange:      #f5a040;
+      --orange-bg:   rgba(245,160,64,0.08);
+      --orange-border:rgba(245,160,64,0.25);
+
+      --accent:      #6AEBD6;
+      --accent-bg:   rgba(106,235,214,0.07);
     }
 
     body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans Hebrew', sans-serif; min-height: 100vh; }
@@ -32,252 +36,289 @@
     /* ── Topbar ── */
     .topbar {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 32px; border-bottom: 1px solid var(--border);
-      background: var(--surface); position: sticky; top: 0; z-index: 100;
+      padding: 0 32px; height: 56px;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
     }
-    .topbar-left { display: flex; align-items: center; gap: 20px; }
-    .topbar-logo { font-family: 'Space Mono', monospace; font-size: 14px; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); }
-    .topbar-sep  { width: 1px; height: 18px; background: var(--border2); }
-    .topbar-title{ font-size: 13px; color: var(--text-sub); }
-    .refresh-btn {
-      background: none; border: 1px solid var(--border2); color: var(--text-sub);
-      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.06em;
-      text-transform: uppercase; padding: 7px 14px; cursor: pointer; transition: all 0.15s;
+    .topbar-left  { display: flex; align-items: center; gap: 16px; }
+    .topbar-logo  { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); }
+    .topbar-sep   { width: 1px; height: 16px; background: var(--border2); }
+    .topbar-title { font-size: 12px; color: var(--text-dim); letter-spacing: 0.04em; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .refresh-btn  {
+      background: none; border: 1px solid var(--border2); color: var(--text-dim);
+      font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 6px 14px; cursor: pointer; transition: all 0.15s;
     }
     .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── Stats ── */
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
-    .stat { background: var(--surface); padding: 24px 28px; }
-    .stat-val { font-family: 'Space Mono', monospace; font-size: 28px; font-weight: 700; color: var(--text); line-height: 1; }
+    /* ── Stats bar ── */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .stat  { padding: 20px 28px; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); }
+    .stat:last-child { border-left: none; }
+    .stat-val { font-family: 'Space Mono', monospace; font-size: 26px; font-weight: 700; color: var(--text); }
+    .stat-val.orange { color: var(--orange); }
+    .stat-val.green  { color: var(--green); }
     .stat-val.accent { color: var(--accent); }
-    .stat-lbl { font-size: 12px; color: var(--text-sub); margin-top: 6px; }
+    .stat-lbl { font-size: 11px; color: var(--text-dim); margin-top: 5px; letter-spacing: 0.03em; }
 
     /* ── Toolbar ── */
     .toolbar {
-      display: flex; align-items: center; gap: 10px;
-      padding: 16px 32px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 32px; border-bottom: 1px solid var(--border);
       background: var(--surface); flex-wrap: wrap;
     }
-    .filter-group { display: flex; gap: 4px; }
+    .filter-group { display: flex; }
     .filter-btn {
       background: none; border: 1px solid var(--border2); color: var(--text-dim);
       font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.08em;
-      text-transform: uppercase; padding: 7px 16px; cursor: pointer; transition: all 0.15s;
+      text-transform: uppercase; padding: 7px 16px; cursor: pointer; transition: all 0.12s;
+      margin-left: -1px;
     }
-    .filter-btn:hover           { border-color: var(--border2); color: var(--text-sub); }
-    .filter-btn.active          { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
-    .filter-btn.active.yellow   { border-color: var(--yellow); color: var(--yellow); background: var(--yellow-bg); }
-    .filter-btn.active.blue     { border-color: var(--blue);   color: var(--blue);   background: var(--blue-bg); }
-    .filter-btn.active.dim      { border-color: var(--border2);color: var(--text-sub);background: var(--surface2); }
+    .filter-btn:first-child { margin-left: 0; }
+    .filter-btn:hover { color: var(--text-sub); border-color: var(--border2); position: relative; z-index: 1; }
+    .filter-btn.active { position: relative; z-index: 1; }
+    .filter-btn.active[data-filter="all"]     { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+    .filter-btn.active[data-filter="paid"]    { border-color: var(--orange); color: var(--orange); background: var(--orange-bg); }
+    .filter-btn.active[data-filter="shipped"] { border-color: var(--green);  color: var(--green);  background: var(--green-bg); }
+    .filter-btn.active[data-filter="pending"] { border-color: var(--green);  color: var(--green);  background: var(--green-bg); }
 
     .search-wrap { margin-right: auto; position: relative; }
-    .search-wrap svg { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); opacity: 0.35; }
+    .search-icon { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); pointer-events: none; }
     .search {
       background: var(--surface2); border: 1px solid var(--border2); color: var(--text);
       font-family: 'IBM Plex Sans Hebrew', sans-serif; font-size: 13px;
-      padding: 8px 36px 8px 14px; outline: none; width: 240px; border-radius: 2px;
+      padding: 8px 36px 8px 14px; outline: none; width: 260px;
     }
     .search::placeholder { color: var(--text-dim); }
     .search:focus { border-color: var(--accent); }
 
-    /* ── Main content ── */
-    main { padding: 28px 32px; max-width: 1200px; }
-
-    /* ── Order cards ── */
-    .orders-list { display: flex; flex-direction: column; gap: 12px; }
+    /* ── Orders ── */
+    main { padding: 24px 32px; }
+    .orders-list { display: flex; flex-direction: column; gap: 10px; }
 
     .order-card {
-      background: var(--surface); border: 1px solid var(--border);
-      transition: border-color 0.15s;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      overflow: hidden;
     }
-    .order-card:hover { border-color: var(--border2); }
-    .order-card.status-paid     { border-right: 3px solid var(--yellow); }
-    .order-card.status-shipped  { border-right: 3px solid var(--blue); }
-    .order-card.status-pending  { border-right: 3px solid var(--border2); }
+    .order-card:hover { border-color: var(--border2); box-shadow: 0 2px 16px rgba(0,0,0,0.3); }
 
+    /* Left accent stripe */
+    .order-card.status-pending  { border-right: 3px solid var(--green); }
+    .order-card.status-paid     { border-right: 3px solid var(--orange); }
+    .order-card.status-shipped  { border-right: 3px solid var(--green); }
+
+    /* Header row */
     .card-header {
-      display: flex; align-items: center; gap: 20px;
-      padding: 16px 20px; border-bottom: 1px solid var(--border);
-      flex-wrap: wrap;
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 20px; border-bottom: 1px solid var(--border);
+      background: var(--surface2); flex-wrap: wrap;
     }
-    .order-id { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; }
-    .order-date { font-size: 12px; color: var(--text-dim); font-family: 'Space Mono', monospace; }
-    .header-spacer { flex: 1; }
-    .order-total { font-family: 'Space Mono', monospace; font-size: 16px; font-weight: 700; color: var(--text); }
+    .order-id    { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; }
+    .order-date  { font-size: 11px; color: var(--text-dim); font-family: 'Space Mono', monospace; }
+    .h-spacer    { flex: 1; }
+    .order-total { font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700; color: var(--text); }
 
+    /* Status badge */
     .badge {
-      display: inline-flex; align-items: center; gap: 5px;
+      display: inline-flex; align-items: center; gap: 6px;
       padding: 4px 12px; font-family: 'Space Mono', monospace;
-      font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+      font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid;
     }
-    .badge::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; }
-    .badge-pending  { border: 1px solid var(--border2); color: var(--text-sub); }
-    .badge-pending::before  { background: var(--border2); }
-    .badge-paid     { border: 1px solid var(--yellow); color: var(--yellow); background: var(--yellow-bg); }
-    .badge-paid::before     { background: var(--yellow); }
-    .badge-shipped  { border: 1px solid var(--blue); color: var(--blue); background: var(--blue-bg); }
-    .badge-shipped::before  { background: var(--blue); }
-    .badge-cancelled{ border: 1px solid var(--red); color: var(--red); background: var(--red-bg); }
-    .badge-cancelled::before{ background: var(--red); }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
-    .card-body {
-      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;
+    .badge-pending  { border-color: var(--green-border);  color: var(--green);  background: var(--green-bg); }
+    .badge-pending .badge-dot  { background: var(--green); }
+
+    .badge-paid     { border-color: var(--orange-border); color: var(--orange); background: var(--orange-bg); }
+    .badge-paid .badge-dot     { background: var(--orange); box-shadow: 0 0 6px var(--orange); animation: pulse 1.6s ease-in-out infinite; }
+
+    .badge-shipped  { border-color: var(--green-border);  color: var(--green);  background: var(--green-bg); }
+    .badge-shipped .badge-dot  { background: var(--green); }
+
+    .badge-cancelled{ border-color: rgba(220,80,80,0.3); color: #e06060; background: rgba(220,80,80,0.06); }
+    .badge-cancelled .badge-dot{ background: #e06060; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
     }
-    .card-section {
-      padding: 16px 20px; border-left: 1px solid var(--border);
+
+    /* Card body - 3 columns */
+    .card-body { display: grid; grid-template-columns: 220px 1fr 240px; }
+    .card-col  { padding: 16px 20px; border-left: 1px solid var(--border); }
+    .card-col:last-child { border-left: none; }
+
+    .col-label {
+      font-size: 10px; font-family: 'Space Mono', monospace; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px;
     }
-    .card-section:last-child { border-left: none; }
-    .section-label { font-size: 10px; font-family: 'Space Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
 
-    .customer-name  { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-    .customer-line  { font-size: 13px; color: var(--text-sub); margin-top: 2px; }
-    .customer-line a{ color: var(--accent); text-decoration: none; }
+    /* Customer column */
+    .cust-name    { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .cust-line    { font-size: 13px; color: var(--text-sub); margin-top: 2px; line-height: 1.5; }
+    .cust-line a  { color: var(--accent); text-decoration: none; }
+    .cust-line a:hover { text-decoration: underline; }
+    .cust-addr    { font-size: 12px; color: var(--text-dim); margin-top: 8px; line-height: 1.6; border-top: 1px solid var(--border); padding-top: 8px; }
 
-    .items-list { display: flex; flex-direction: column; gap: 6px; }
-    .item-row   { display: flex; justify-content: space-between; align-items: center; }
-    .item-name  { font-size: 13px; color: var(--text-sub); }
-    .item-qty   { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-dim); }
+    /* Items column */
+    .item-row  { display: flex; align-items: baseline; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); }
+    .item-row:last-child { border-bottom: none; }
+    .item-name { font-size: 13px; color: var(--text-sub); }
+    .item-var  { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
+    .item-qty  { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-dim); white-space: nowrap; }
 
-    .tracking-block {
-      display: flex; flex-direction: column; gap: 6px;
-      background: var(--blue-bg); border: 1px solid rgba(106,176,235,0.2);
-      padding: 10px 14px;
-    }
-    .tracking-carrier { font-size: 12px; color: var(--text-sub); }
-    .tracking-num { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--blue); font-weight: 700; }
+    /* Ship column */
+    .ship-action { display: flex; flex-direction: column; gap: 8px; }
 
-    /* Ship action */
-    .ship-action { display: flex; flex-direction: column; gap: 10px; }
-    .ship-row { display: flex; gap: 8px; }
+    .ship-input-group { display: flex; gap: 6px; }
     .ship-input {
-      background: var(--surface2); border: 1px solid var(--border2); color: var(--text);
-      font-family: 'Space Mono', monospace; font-size: 12px;
-      padding: 8px 12px; outline: none; flex: 1; min-width: 0;
+      background: var(--surface3); border: 1px solid var(--border2); color: var(--text);
+      font-family: 'Space Mono', monospace; font-size: 11px;
+      padding: 8px 10px; outline: none; flex: 1; min-width: 0;
     }
     .ship-input::placeholder { color: var(--text-dim); }
-    .ship-input:focus { border-color: var(--accent); }
-    .ship-input.sm { flex: 0 0 100px; }
+    .ship-input:focus { border-color: var(--orange); }
+    .ship-input.sm { flex: 0 0 80px; }
+
     .btn-ship {
-      background: var(--accent); color: #060606; border: none;
+      background: var(--orange); color: #0b0b0d; border: none;
       font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      padding: 0 18px; cursor: pointer; white-space: nowrap; transition: opacity 0.15s;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 10px 0; cursor: pointer; transition: opacity 0.15s; width: 100%;
     }
     .btn-ship:hover    { opacity: 0.85; }
-    .btn-ship:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-ship:disabled { opacity: 0.35; cursor: not-allowed; }
 
-    /* States */
-    .empty {
-      text-align: center; padding: 80px 20px; color: var(--text-dim);
-      font-family: 'Space Mono', monospace; font-size: 12px;
+    .tracking-block {
+      border: 1px solid var(--green-border); background: var(--green-bg); padding: 12px 14px;
     }
-    .empty svg { margin-bottom: 16px; opacity: 0.2; }
-    .loading {
-      text-align: center; padding: 80px 20px; color: var(--text-dim);
-      font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    .tracking-carrier { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; }
+    .tracking-num     { font-family: 'Space Mono', monospace; font-size: 14px; color: var(--green); font-weight: 700; }
+
+    /* Empty / loading */
+    .state-box {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 80px 20px; gap: 14px; color: var(--text-dim);
+      font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.06em;
     }
+    .state-box svg { opacity: 0.18; }
+
     .error-msg {
-      padding: 60px 20px; text-align: center;
-      font-family: 'Space Mono', monospace; font-size: 13px; color: var(--red);
+      padding: 60px; text-align: center;
+      font-family: 'Space Mono', monospace; font-size: 13px; color: #e06060;
     }
 
     /* ── Responsive ── */
-    @media (max-width: 800px) {
-      .topbar { padding: 14px 16px; }
-      main { padding: 16px; }
-      .toolbar { padding: 12px 16px; }
+    @media (max-width: 860px) {
+      .topbar, .toolbar, main { padding-right: 16px; padding-left: 16px; }
       .stats { grid-template-columns: repeat(2, 1fr); }
+      .stat:nth-child(2) { border-left: none; }
       .card-body { grid-template-columns: 1fr; }
-      .card-section { border-left: none; border-top: 1px solid var(--border); }
-      .card-section:first-child { border-top: none; }
+      .card-col  { border-left: none; border-top: 1px solid var(--border); }
+      .card-col:first-child { border-top: none; }
       .search-wrap { margin-right: 0; width: 100%; }
       .search { width: 100%; }
-      .filter-group { flex-wrap: wrap; }
     }
     @media (max-width: 480px) {
-      .stats { grid-template-columns: 1fr 1fr; }
-      .stat { padding: 16px; }
+      .filter-group { flex-wrap: wrap; }
       .stat-val { font-size: 22px; }
-      .card-header { gap: 10px; }
     }
   </style>
 </head>
 <body>
 
-<!-- Topbar -->
 <header class="topbar">
   <div class="topbar-left">
     <div class="topbar-logo">VAYO</div>
     <div class="topbar-sep"></div>
     <div class="topbar-title">ניהול הזמנות</div>
   </div>
-  <button class="refresh-btn" onclick="loadOrders()">רענן</button>
+  <div class="topbar-right">
+    <button class="refresh-btn" onclick="loadOrders()">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="vertical-align:middle;margin-left:5px">
+        <path d="M9 5A4 4 0 1 1 5.5 1.07" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M6 1h3v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      רענן
+    </button>
+  </div>
 </header>
 
-<!-- Stats -->
-<div class="stats" id="stats">
+<div class="stats">
   <div class="stat">
     <div class="stat-val" id="st-total">—</div>
     <div class="stat-lbl">סה"כ הזמנות</div>
   </div>
   <div class="stat">
-    <div class="stat-val accent" id="st-paid">—</div>
+    <div class="stat-val orange" id="st-paid">—</div>
     <div class="stat-lbl">ממתינות למשלוח</div>
   </div>
   <div class="stat">
-    <div class="stat-val" id="st-shipped">—</div>
+    <div class="stat-val green" id="st-shipped">—</div>
     <div class="stat-lbl">נשלחו</div>
   </div>
   <div class="stat">
-    <div class="stat-val" id="st-revenue">—</div>
-    <div class="stat-lbl">הכנסות</div>
+    <div class="stat-val accent" id="st-revenue">—</div>
+    <div class="stat-lbl">הכנסות כולל משלוח</div>
   </div>
 </div>
 
-<!-- Toolbar -->
 <div class="toolbar">
   <div class="filter-group">
     <button class="filter-btn active" data-filter="all">הכל</button>
-    <button class="filter-btn yellow" data-filter="paid">ממתין למשלוח</button>
-    <button class="filter-btn blue"   data-filter="shipped">נשלח</button>
-    <button class="filter-btn dim"    data-filter="pending">טרם שולם</button>
+    <button class="filter-btn" data-filter="paid">ממתין למשלוח</button>
+    <button class="filter-btn" data-filter="shipped">נשלח</button>
+    <button class="filter-btn" data-filter="pending">טרם שולם</button>
   </div>
   <div class="search-wrap">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <circle cx="6" cy="6" r="4.5" stroke="#fff" stroke-width="1.5"/>
-      <path d="M9.5 9.5L13 13" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>
-    <input type="text" class="search" id="search" placeholder="חיפוש לפי שם, הזמנה, טלפון..." />
+    <span class="search-icon">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <circle cx="6" cy="6" r="4.5" stroke="#58586a" stroke-width="1.4"/>
+        <path d="M9.5 9.5L13 13" stroke="#58586a" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <input type="text" class="search" id="search" placeholder="חיפוש - שם, הזמנה, טלפון..." />
   </div>
 </div>
 
-<!-- Orders -->
 <main>
   <div id="orders-container">
-    <div class="loading">טוען הזמנות...</div>
+    <div class="state-box">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <rect x="6" y="10" width="24" height="20" rx="1" stroke="white" stroke-width="1.5"/>
+        <path d="M12 18h12M12 23h8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M12 10V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2" stroke="white" stroke-width="1.5"/>
+      </svg>
+      טוען הזמנות...
+    </div>
   </div>
 </main>
 
 <script>
   const KEY = new URLSearchParams(location.search).get('key') || '';
-  if (!KEY) {
-    document.body.innerHTML = '<div class="error-msg">Missing ?key= parameter</div>';
-  }
+  if (!KEY) document.body.innerHTML = '<div class="error-msg">Missing ?key= parameter</div>';
 
-  let allOrders = [];
+  let allOrders   = [];
   let activeFilter = 'all';
 
   async function loadOrders() {
-    document.getElementById('orders-container').innerHTML = '<div class="loading">טוען הזמנות...</div>';
+    setLoading();
     const r = await fetch('/api/admin/orders?key=' + KEY);
-    if (r.status === 401) {
-      document.body.innerHTML = '<div class="error-msg">Unauthorized — wrong admin key</div>';
-      return;
-    }
+    if (r.status === 401) { document.body.innerHTML = '<div class="error-msg">Unauthorized — wrong admin key</div>'; return; }
     allOrders = await r.json();
+    // Sort: paid first (need action), then pending, then shipped
+    const order = { paid: 0, pending: 1, shipped: 2 };
+    allOrders.sort((a, b) => (order[a.status] ?? 9) - (order[b.status] ?? 9));
     updateStats();
     render();
+  }
+
+  function setLoading() {
+    document.getElementById('orders-container').innerHTML =
+      '<div class="state-box"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="6" y="10" width="24" height="20" rx="1" stroke="white" stroke-width="1.5"/><path d="M12 18h12M12 23h8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>טוען...</div>';
   }
 
   function updateStats() {
@@ -293,68 +334,68 @@
 
   function render() {
     const q = document.getElementById('search').value.trim().toLowerCase();
-    const orders = allOrders.filter(o => {
+    const list = allOrders.filter(o => {
       if (activeFilter !== 'all' && o.status !== activeFilter) return false;
       if (q) {
-        const hay = (o.id + (o.customer?.name || '') + (o.customer?.phone || '') + (o.customer?.email || '')).toLowerCase();
-        if (!hay.includes(q)) return false;
+        const hay = (o.id + (o.customer?.name||'') + (o.customer?.phone||'') + (o.customer?.email||'')).toLowerCase();
+        return hay.includes(q);
       }
       return true;
     });
 
-    if (!orders.length) {
-      document.getElementById('orders-container').innerHTML = `
-        <div class="empty">
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-            <rect x="8" y="12" width="24" height="20" rx="1" stroke="white" stroke-width="1.5"/>
-            <path d="M14 20h12M14 25h8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M14 12V9a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3" stroke="white" stroke-width="1.5"/>
-          </svg>
-          <div>אין הזמנות להצגה</div>
-        </div>`;
+    if (!list.length) {
+      document.getElementById('orders-container').innerHTML =
+        '<div class="state-box"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="6" y="10" width="24" height="20" rx="1" stroke="white" stroke-width="1.5"/><path d="M12 18h12M12 23h8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>אין הזמנות להצגה</div>';
       return;
     }
 
-    const cards = orders.map(o => buildCard(o)).join('');
-    document.getElementById('orders-container').innerHTML = `<div class="orders-list">${cards}</div>`;
+    document.getElementById('orders-container').innerHTML =
+      '<div class="orders-list">' + list.map(buildCard).join('') + '</div>';
+  }
+
+  function statusLabel(s) {
+    return { pending:'טרם שולם', paid:'ממתין למשלוח', shipped:'נשלח', cancelled:'בוטל', refunded:'הוחזר' }[s] || s;
   }
 
   function buildCard(o) {
-    const dateStr = o.created_at
-      ? o.created_at.replace('T', ' ').slice(0, 16)
-      : '';
+    const dateStr = (o.created_at || '').replace('T',' ').slice(0,16);
 
-    const badge = `<span class="badge badge-${o.status}">${statusLabel(o.status)}</span>`;
+    const badge = `<span class="badge badge-${o.status}"><span class="badge-dot"></span>${statusLabel(o.status)}</span>`;
 
     // Items
-    const itemsHtml = (o.items || []).map(i => `
+    const items = (o.items || []).map(i => `
       <div class="item-row">
-        <span class="item-name">${i.name}${i.variant ? ' <span style="color:var(--text-dim);font-size:11px;">— ' + i.variant + '</span>' : ''}</span>
-        <span class="item-qty">x${i.qty}</span>
+        <div>
+          <div class="item-name">${i.name}</div>
+          ${i.variant ? `<div class="item-var">${i.variant}</div>` : ''}
+        </div>
+        <div class="item-qty">×${i.qty}</div>
       </div>`).join('');
 
     // Address
     const addr = o.customer?.address || '';
 
-    // Action column
-    let actionHtml = '';
+    // Action
+    let action = '';
     if (o.status === 'paid') {
-      actionHtml = `
+      action = `
         <div class="ship-action">
-          <div class="ship-row">
+          <div class="ship-input-group">
             <input class="ship-input sm" placeholder="ספק" id="carrier-${o.id}" />
             <input class="ship-input" placeholder="מספר מעקב" id="tracking-${o.id}" />
           </div>
           <button class="btn-ship" onclick="ship('${o.id}')">סמן כנשלח</button>
         </div>`;
     } else if (o.status === 'shipped' && o.tracking) {
-      actionHtml = `
+      action = `
         <div class="tracking-block">
           <div class="tracking-carrier">${o.carrier || 'משלוח'}</div>
           <div class="tracking-num">${o.tracking}</div>
         </div>`;
+    } else if (o.status === 'shipped') {
+      action = `<div style="font-size:12px;color:var(--text-dim);">נשלח ללא מספר מעקב</div>`;
     } else {
-      actionHtml = `<div style="color:var(--text-dim);font-size:12px;">—</div>`;
+      action = `<div style="font-size:12px;color:var(--text-dim);">ממתין לתשלום</div>`;
     }
 
     return `
@@ -362,34 +403,28 @@
         <div class="card-header">
           <div class="order-id">#${o.id}</div>
           <div class="order-date">${dateStr}</div>
-          <div class="header-spacer"></div>
+          <div class="h-spacer"></div>
           <div class="order-total">${(o.total || 0).toLocaleString('he-IL')} ₪</div>
           ${badge}
         </div>
         <div class="card-body">
-          <div class="card-section">
-            <div class="section-label">לקוח</div>
-            <div class="customer-name">${o.customer?.name || ''}</div>
-            <div class="customer-line">
-              <a href="tel:${o.customer?.phone || ''}">${o.customer?.phone || ''}</a>
-            </div>
-            <div class="customer-line">${o.customer?.email || ''}</div>
-            ${addr ? `<div class="customer-line" style="margin-top:8px;color:var(--text-dim);font-size:12px;">${addr}</div>` : ''}
+          <div class="card-col">
+            <div class="col-label">לקוח</div>
+            <div class="cust-name">${o.customer?.name || ''}</div>
+            <div class="cust-line"><a href="tel:${o.customer?.phone||''}">${o.customer?.phone||''}</a></div>
+            <div class="cust-line">${o.customer?.email||''}</div>
+            ${addr ? `<div class="cust-addr">${addr}</div>` : ''}
           </div>
-          <div class="card-section">
-            <div class="section-label">מוצרים</div>
-            <div class="items-list">${itemsHtml}</div>
+          <div class="card-col">
+            <div class="col-label">מוצרים</div>
+            <div class="items-list">${items}</div>
           </div>
-          <div class="card-section">
-            <div class="section-label">משלוח</div>
-            ${actionHtml}
+          <div class="card-col">
+            <div class="col-label">משלוח</div>
+            ${action}
           </div>
         </div>
       </div>`;
-  }
-
-  function statusLabel(s) {
-    return { pending: 'טרם שולם', paid: 'שולם - ממתין', shipped: 'נשלח', cancelled: 'בוטל', refunded: 'הוחזר' }[s] || s;
   }
 
   async function ship(orderId) {
@@ -398,8 +433,7 @@
     const btn = document.querySelector(`button[onclick="ship('${orderId}')"]`);
     if (btn) { btn.disabled = true; btn.textContent = 'שולח...'; }
     const r = await fetch(`/api/admin/orders/${orderId}/ship?key=${KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ tracking, carrier })
     });
     const d = await r.json();
