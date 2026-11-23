@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VAYO — ניהול הזמנות</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans+Hebrew:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #060606; color: #e8e8e8; font-family: 'IBM Plex Sans Hebrew', sans-serif; min-height: 100vh; }
+    .mono { font-family: 'Space Mono', monospace; }
+
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 20px 32px; border-bottom: 1px solid #1a1a1a; }
+    .topbar-logo { font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.12em; color: #6AEBD6; text-transform: uppercase; }
+    .topbar-title { font-size: 11px; font-family: 'Space Mono', monospace; color: #444; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    .stats { display: flex; gap: 1px; background: #111; border-bottom: 1px solid #1a1a1a; }
+    .stat { flex: 1; padding: 20px 28px; background: #0a0a0a; }
+    .stat-val { font-family: 'Space Mono', monospace; font-size: 24px; font-weight: 700; color: #fff; }
+    .stat-lbl { font-size: 11px; font-family: 'Space Mono', monospace; color: #444; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+
+    .filters { display: flex; gap: 8px; padding: 20px 32px; border-bottom: 1px solid #111; flex-wrap: wrap; align-items: center; }
+    .filter-btn { background: none; border: 1px solid #222; color: #555; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 14px; cursor: pointer; transition: all 0.15s; }
+    .filter-btn.active, .filter-btn:hover { border-color: #6AEBD6; color: #6AEBD6; }
+    .search { margin-right: auto; background: #0d0d0d; border: 1px solid #222; color: #e8e8e8; font-family: 'Space Mono', monospace; font-size: 11px; padding: 7px 14px; outline: none; width: 220px; }
+    .search:focus { border-color: #6AEBD6; }
+
+    .orders-table { width: 100%; border-collapse: collapse; }
+    .orders-table th { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.08em; color: #333; text-transform: uppercase; padding: 12px 20px; text-align: right; border-bottom: 1px solid #111; background: #080808; }
+    .orders-table td { padding: 16px 20px; border-bottom: 1px solid #0d0d0d; font-size: 13px; vertical-align: top; }
+    .orders-table tr:hover td { background: #0a0a0a; }
+
+    .order-id { font-family: 'Space Mono', monospace; font-size: 12px; color: #6AEBD6; letter-spacing: 0.08em; }
+    .customer-name { font-weight: 700; color: #fff; }
+    .customer-contact { font-family: 'Space Mono', monospace; font-size: 10px; color: #444; margin-top: 3px; }
+    .items-list { font-size: 12px; color: #666; line-height: 1.6; }
+    .total-cell { font-family: 'Space Mono', monospace; font-weight: 700; color: #fff; }
+
+    .badge { display: inline-block; padding: 3px 10px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .badge-pending  { border: 1px solid #444; color: #666; }
+    .badge-paid     { border: 1px solid #3a7a60; color: #6AEBD6; background: rgba(106,235,214,0.06); }
+    .badge-shipped  { border: 1px solid #3a5c8a; color: #6ab0eb; background: rgba(106,176,235,0.06); }
+    .badge-cancelled{ border: 1px solid #5a2a2a; color: #eb6a6a; }
+
+    .btn-ship { background: #6AEBD6; color: #060606; border: none; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 7px 14px; cursor: pointer; transition: opacity 0.15s; white-space: nowrap; }
+    .btn-ship:hover { opacity: 0.85; }
+    .btn-ship:disabled { opacity: 0.3; cursor: not-allowed; }
+    .tracking-txt { font-family: 'Space Mono', monospace; font-size: 11px; color: #6ab0eb; margin-top: 4px; }
+
+    .ship-form { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+    .ship-input { background: #111; border: 1px solid #222; color: #e8e8e8; font-family: 'Space Mono', monospace; font-size: 11px; padding: 6px 10px; outline: none; width: 160px; }
+    .ship-input:focus { border-color: #6AEBD6; }
+    .ship-input.sm { width: 100px; }
+
+    .empty { padding: 60px; text-align: center; color: #333; font-family: 'Space Mono', monospace; font-size: 12px; }
+    .loading { padding: 60px; text-align: center; color: #444; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.08em; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">VAYO</div>
+  <div class="topbar-title">ניהול הזמנות</div>
+</div>
+
+<div class="stats" id="stats">
+  <div class="stat"><div class="stat-val" id="st-total">—</div><div class="stat-lbl">סה"כ הזמנות</div></div>
+  <div class="stat"><div class="stat-val" id="st-paid">—</div><div class="stat-lbl">ממתינות למשלוח</div></div>
+  <div class="stat"><div class="stat-val" id="st-shipped">—</div><div class="stat-lbl">נשלחו</div></div>
+  <div class="stat"><div class="stat-val" id="st-revenue">—</div><div class="stat-lbl">הכנסות</div></div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-filter="all">הכל</button>
+  <button class="filter-btn" data-filter="paid">ממתין למשלוח</button>
+  <button class="filter-btn" data-filter="shipped">נשלח</button>
+  <button class="filter-btn" data-filter="pending">טרם שולם</button>
+  <input type="text" class="search mono" id="search" placeholder="חיפוש לפי שם / הזמנה..." />
+</div>
+
+<div id="orders-container">
+  <div class="loading">טוען הזמנות...</div>
+</div>
+
+<script>
+  const KEY = new URLSearchParams(location.search).get('key') || '';
+  if (!KEY) { document.body.innerHTML = '<div style="padding:60px;text-align:center;font-family:monospace;color:#eb6a6a;">Missing ?key= parameter</div>'; }
+
+  let allOrders = [];
+  let activeFilter = 'all';
+
+  async function loadOrders() {
+    const r = await fetch('/api/admin/orders?key=' + KEY);
+    if (r.status === 401) { document.body.innerHTML = '<div style="padding:60px;text-align:center;font-family:monospace;color:#eb6a6a;">Unauthorized</div>'; return; }
+    allOrders = await r.json();
+    updateStats();
+    render();
+  }
+
+  function updateStats() {
+    const paid    = allOrders.filter(o => o.status === 'paid').length;
+    const shipped = allOrders.filter(o => o.status === 'shipped').length;
+    const revenue = allOrders.filter(o => ['paid','shipped'].includes(o.status)).reduce((s,o) => s + (o.total||0), 0);
+    document.getElementById('st-total').textContent   = allOrders.length;
+    document.getElementById('st-paid').textContent    = paid;
+    document.getElementById('st-shipped').textContent = shipped;
+    document.getElementById('st-revenue').textContent = revenue.toLocaleString('he-IL') + ' ₪';
+  }
+
+  function render() {
+    const q = document.getElementById('search').value.trim().toLowerCase();
+    let orders = allOrders.filter(o => {
+      if (activeFilter !== 'all' && o.status !== activeFilter) return false;
+      if (q) {
+        const hay = (o.id + o.customer?.name + o.customer?.phone + o.customer?.email).toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+
+    if (!orders.length) {
+      document.getElementById('orders-container').innerHTML = '<div class="empty">אין הזמנות</div>';
+      return;
+    }
+
+    const rows = orders.map(o => {
+      const items = (o.items || []).map(i => `${i.name} ×${i.qty}`).join('<br>');
+      const badge = `<span class="badge badge-${o.status}">${statusLabel(o.status)}</span>`;
+      const shipAction = o.status === 'paid' ? `
+        <div class="ship-form">
+          <input class="ship-input sm" placeholder="ספק" id="carrier-${o.id}" value="" />
+          <input class="ship-input" placeholder="מספר מעקב" id="tracking-${o.id}" />
+          <button class="btn-ship" onclick="ship('${o.id}')">סמן כנשלח</button>
+        </div>` : '';
+      const trackingLine = o.tracking ? `<div class="tracking-txt">${o.carrier || ''} ${o.tracking}</div>` : '';
+      return `<tr>
+        <td><div class="order-id">#${o.id}</div><div style="font-family:monospace;font-size:10px;color:#333;margin-top:3px;">${o.created_at||''}</div></td>
+        <td><div class="customer-name">${o.customer?.name||''}</div>
+            <div class="customer-contact">${o.customer?.phone||''}</div>
+            <div class="customer-contact">${o.customer?.email||''}</div>
+            <div class="customer-contact" style="color:#333;">${o.customer?.address||''}</div></td>
+        <td><div class="items-list">${items}</div></td>
+        <td class="total-cell">${o.total||0} ₪</td>
+        <td>${badge}${trackingLine}${shipAction}</td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('orders-container').innerHTML = `
+      <table class="orders-table">
+        <thead><tr>
+          <th>הזמנה</th><th>לקוח</th><th>מוצרים</th><th>סכום</th><th>סטטוס</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+
+  function statusLabel(s) {
+    return {pending:'טרם שולם', paid:'שולם', shipped:'נשלח', cancelled:'בוטל', refunded:'הוחזר'}[s] || s;
+  }
+
+  async function ship(orderId) {
+    const tracking = document.getElementById('tracking-' + orderId)?.value.trim() || '';
+    const carrier  = document.getElementById('carrier-'  + orderId)?.value.trim() || '';
+    const btn = document.querySelector(`button[onclick="ship('${orderId}')"]`);
+    if (btn) btn.disabled = true;
+    const r = await fetch(`/api/admin/orders/${orderId}/ship?key=${KEY}`, {
+      method:  'POST',
+      headers: {'Content-Type': 'application/json'},
+      body:    JSON.stringify({ tracking, carrier })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      await loadOrders();
+    } else {
+      alert(d.error || 'שגיאה');
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      render();
+    });
+  });
+  document.getElementById('search').addEventListener('input', render);
+
+  loadOrders();
+</script>
+</body>
+</html>

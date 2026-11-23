@@ -163,8 +163,12 @@ def payment():
         print(f'Morning token error: {e}')
         return jsonify({'error': 'payment_unavailable'}), 503
 
+    order_id    = uuid.uuid4().hex[:8].upper()
+    create_order(order_id, items, customer, total)
+    success_url = f'https://www.vayo-sport.com/pages/order-success.html?order={order_id}'
+
     payload = json.dumps({
-        'description': description,
+        'description': f'[{order_id}] {description}',
         'type':        320,
         'amount':      total,
         'currency':    'ILS',
@@ -172,6 +176,7 @@ def payment():
         'lang':        'he',
         'pluginId':    MORNING_PLUGIN_ID,
         'group':       100,
+        'successUrl':  success_url,
         'client':      {'name': name, 'emails': [email]}
     }).encode('utf-8')
 
@@ -184,9 +189,6 @@ def payment():
             'Accept':        'application/json'
         }
     )
-    order_id = uuid.uuid4().hex[:8].upper()
-    create_order(order_id, items, customer, total)
-
     try:
         with urllib.request.urlopen(req, timeout=10) as r:
             result = json.loads(r.read())
@@ -214,10 +216,16 @@ def payment_confirm():
     if order.get('status') != 'paid':
         mark_paid(order_id)
         order['status'] = 'paid'
-        try:    send_order_email_customer(order)
-        except Exception as e: print(f'Order email customer: {e}')
-        try:    send_order_email_admin(order)
-        except Exception as e: print(f'Order email admin: {e}')
+        try:
+            send_order_email_customer(order)
+            print(f'[{order_id}] customer email sent to {order["customer"].get("email")}')
+        except Exception as e:
+            print(f'[{order_id}] customer email ERROR: {e}')
+        try:
+            send_order_email_admin(order)
+            print(f'[{order_id}] admin email sent')
+        except Exception as e:
+            print(f'[{order_id}] admin email ERROR: {e}')
     return redirect(f'{SUCCESS_URL}?order={order_id}')
 
 @app.route('/api/payment/webhook', methods=['POST', 'OPTIONS'])
@@ -238,6 +246,88 @@ def payment_webhook():
         except Exception as e: print(f'Webhook email customer: {e}')
         try:    send_order_email_admin(order)
         except Exception as e: print(f'Webhook email admin: {e}')
+    return jsonify({'ok': True})
+
+
+# ── Order status (public) ─────────────────────────────────────────────────────
+
+@app.route('/api/order/status', methods=['GET'])
+def order_status():
+    order_id = (request.args.get('order') or '').strip().upper()
+    email    = (request.args.get('email')  or '').strip().lower()
+    if not order_id or not email:
+        return jsonify({'error': 'missing_params'}), 400
+    order = find_order(order_id)
+    if not order or order.get('customer', {}).get('email', '').lower() != email:
+        return jsonify({'error': 'not_found'}), 404
+    return jsonify({
+        'id':       order['id'],
+        'status':   order.get('status', 'pending'),
+        'total':    order.get('total'),
+        'items':    order.get('items', []),
+        'tracking': order.get('tracking'),
+        'carrier':  order.get('carrier'),
+        'paid_at':  order.get('paid_at'),
+        'shipped_at': order.get('shipped_at'),
+        'created_at': order.get('created_at'),
+    })
+
+# ── Admin: list orders ────────────────────────────────────────────────────────
+
+ORDERS_ADMIN_KEY = os.environ.get('ORDERS_ADMIN_KEY', 'vayo-admin-2026')
+
+def admin_auth():
+    return request.args.get('key') == ORDERS_ADMIN_KEY or            request.headers.get('X-Admin-Key') == ORDERS_ADMIN_KEY
+
+@app.route('/api/admin/orders', methods=['GET'])
+def admin_orders():
+    if not admin_auth():
+        return jsonify({'error': 'unauthorized'}), 401
+    orders = load_orders()
+    # newest first
+    orders.sort(key=lambda o: o.get('created_at', ''), reverse=True)
+    return jsonify(orders)
+
+@app.route('/api/admin/orders/<order_id>/ship', methods=['POST'])
+def admin_ship(order_id):
+    if not admin_auth():
+        return jsonify({'error': 'unauthorized'}), 401
+    data     = request.get_json(silent=True) or {}
+    tracking = (data.get('tracking') or '').strip()
+    carrier  = (data.get('carrier')  or '').strip()
+    orders   = load_orders()
+    order    = next((o for o in orders if o['id'] == order_id.upper()), None)
+    if not order:
+        return jsonify({'error': 'not_found'}), 404
+    if order.get('status') == 'shipped':
+        return jsonify({'error': 'already_shipped'}), 400
+    order['status']     = 'shipped'
+    order['tracking']   = tracking or None
+    order['carrier']    = carrier  or None
+    order['shipped_at'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    save_orders(orders)
+    try:
+        send_shipped_email(order)
+        print(f'[{order_id}] shipped email sent')
+    except Exception as e:
+        print(f'[{order_id}] shipped email error: {e}')
+    return jsonify({'ok': True, 'order': order})
+
+@app.route('/api/admin/orders/<order_id>/status', methods=['POST'])
+def admin_update_status(order_id):
+    """Generic status update (refund, cancel, etc.)"""
+    if not admin_auth():
+        return jsonify({'error': 'unauthorized'}), 401
+    data   = request.get_json(silent=True) or {}
+    status = (data.get('status') or '').strip()
+    if status not in ('pending', 'paid', 'shipped', 'cancelled', 'refunded'):
+        return jsonify({'error': 'invalid_status'}), 400
+    orders = load_orders()
+    order  = next((o for o in orders if o['id'] == order_id.upper()), None)
+    if not order:
+        return jsonify({'error': 'not_found'}), 404
+    order['status'] = status
+    save_orders(orders)
     return jsonify({'ok': True})
 
 def resend_post(payload_dict):
@@ -535,7 +625,7 @@ def send_order_email_customer(order):
   <tr><td style="padding:32px 40px 8px;" dir="rtl">
     <p style="margin:0 0 6px;font-family:'Courier New',monospace;font-size:11px;letter-spacing:0.1em;color:#6AEBD6;text-transform:uppercase;">הזמנה #{order['id']}</p>
     <h1 style="margin:0 0 20px;font-size:24px;font-weight:700;letter-spacing:0.06em;color:#ffffff;text-transform:uppercase;">תודה, {c.get('name','')}</h1>
-    <p style="margin:0;font-size:15px;color:#888;line-height:1.8;">ההזמנה שלך התקבלה ואושרה. המלאי הראשון כבר בדרך אלינו — נשלח לך ישירות ברגע שיגיע למחסן.</p>
+    <p style="margin:0;font-size:15px;color:#888;line-height:1.8;">ההזמנה שלך התקבלה ואושרה. המלאי הראשון כבר בדרך אלינו. נשלח לך ישירות ברגע שיגיע למחסן.</p>
   </td></tr>
   <tr><td style="padding:16px 40px 0;"><div style="height:1px;background:linear-gradient(90deg,#6AEBD6 0%,transparent 100%);"></div></td></tr>
   <tr><td style="padding:24px 40px 8px;" dir="rtl">
@@ -618,6 +708,69 @@ def send_order_email_admin(order):
         'to':      [NOTIFY_EMAIL],
         'subject': f'הזמנה חדשה #{order["id"]} — {c.get("name","")} | {order["total"]} ₪',
         'html':    html
+    })
+
+
+def send_shipped_email(order):
+    c        = order.get('customer', {})
+    tracking = order.get('tracking')
+    carrier  = order.get('carrier', 'שליח')
+    items    = order.get('items', [])
+    rows = ''
+    for item in items:
+        rows += f"<tr><td style='padding:8px 0;border-bottom:1px solid #1a1a1a;font-size:14px;color:#fff;'>{item.get('name','')} · {item.get('variant','')}</td><td style='padding:8px 0;border-bottom:1px solid #1a1a1a;font-family:monospace;font-size:12px;color:#aaa;text-align:left;'>×{item.get('qty',1)}</td></tr>"
+
+    tracking_block = ''
+    if tracking:
+        tracking_block = f"""
+  <tr><td style="padding:0 40px 32px;" dir="rtl">
+    <div style="background:#111;border:1px solid rgba(106,235,214,0.2);padding:20px 24px;">
+      <p style="margin:0 0 8px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.1em;color:#6AEBD6;text-transform:uppercase;">{carrier} - מספר מעקב</p>
+      <p style="margin:0;font-family:'Courier New',monospace;font-size:18px;font-weight:700;color:#fff;letter-spacing:0.08em;">{tracking}</p>
+    </div>
+  </td></tr>"""
+
+    html = f"""<!DOCTYPE html>
+<html lang="he"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#060606;font-family:Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#060606;padding:40px 0;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#0d0d0d;border:1px solid #1a1a1a;">
+  <tr><td style="padding:32px 40px 24px;border-bottom:1px solid #1a1a1a;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td><img src="https://www.vayo-sport.com/images/vayo-logo.png" alt="VAYO" height="32" style="display:block;" /></td>
+      <td align="left"><span style="display:inline-block;padding:5px 14px;border:1px solid #6AEBD6;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.1em;color:#6AEBD6;text-transform:uppercase;">ההזמנה בדרך</span></td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="padding:32px 40px 24px;" dir="rtl">
+    <p style="margin:0 0 6px;font-family:'Courier New',monospace;font-size:11px;letter-spacing:0.1em;color:#6AEBD6;text-transform:uppercase;">הזמנה #{order['id']}</p>
+    <h1 style="margin:0 0 16px;font-size:24px;font-weight:700;letter-spacing:0.06em;color:#fff;text-transform:uppercase;">ההזמנה שלך בדרך, {c.get('name','').split()[0]}!</h1>
+    <p style="margin:0;font-size:15px;color:#888;line-height:1.8;">האריזה יצאה מהמחסן ובדרכה אליך. צפי הגעה: 3-5 ימי עסקים.</p>
+  </td></tr>
+  <tr><td style="padding:16px 40px 0;"><div style="height:1px;background:linear-gradient(90deg,#6AEBD6 0%,transparent 100%);"></div></td></tr>
+  {tracking_block}
+  <tr><td style="padding:24px 40px 8px;" dir="rtl">
+    <p style="margin:0 0 12px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.1em;color:#444;text-transform:uppercase;">פרטי הזמנה</p>
+    <table width="100%" cellpadding="0" cellspacing="0">{rows}</table>
+  </td></tr>
+  <tr><td style="padding:12px 40px 32px;" dir="rtl">
+    <p style="margin:0 0 4px;font-family:'Courier New',monospace;font-size:10px;color:#444;text-transform:uppercase;">כתובת למשלוח</p>
+    <p style="margin:0;font-size:14px;color:#888;">{c.get('address','')}</p>
+  </td></tr>
+  <tr><td style="padding:20px 40px;border-top:1px solid #1a1a1a;background:#0a0a0a;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td style="font-family:'Courier New',monospace;font-size:10px;color:#333;text-transform:uppercase;">VAYO &nbsp;·&nbsp; Engineered for Padel</td>
+      <td align="right"><a href="mailto:vayo@blade-agency.net" style="font-family:'Courier New',monospace;font-size:10px;color:#333;text-decoration:none;">vayo@blade-agency.net</a></td>
+    </tr></table>
+  </td></tr>
+</table>
+</td></tr></table>
+</body></html>"""
+    resend_post({
+        'from': 'VAYO <noreply@vayo-sport.com>',
+        'to':   [c.get('email', NOTIFY_EMAIL)],
+        'subject': f'ההזמנה שלך בדרך — VAYO #{order["id"]}',
+        'html': html
     })
 
 if __name__ == '__main__':

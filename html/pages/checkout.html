@@ -349,20 +349,31 @@
 
         <div class="checkout-divider"></div>
 
-        <div class="form-group">
-          <label for="street">רחוב ומספר בית</label>
-          <input type="text" id="street" name="street" placeholder="הרצל 1" required />
-        </div>
-
         <div class="form-row">
+          <div class="form-group">
+            <label for="street">רחוב ומספר בית</label>
+            <input type="text" id="street" name="street" placeholder="הרצל 1" required />
+          </div>
           <div class="form-group">
             <label for="city">עיר</label>
             <input type="text" id="city" name="city" placeholder="תל אביב" required />
           </div>
+        </div>
+
+        <div class="form-row">
           <div class="form-group">
-            <label for="zip">מיקוד</label>
-            <input type="text" id="zip" name="zip" placeholder="6100000" />
+            <label for="floor">קומה</label>
+            <input type="text" id="floor" name="floor" placeholder="3" />
           </div>
+          <div class="form-group">
+            <label for="apt">דירה</label>
+            <input type="text" id="apt" name="apt" placeholder="12" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="zip">מיקוד</label>
+          <input type="text" id="zip" name="zip" placeholder="6100000" required />
         </div>
 
         <div class="checkout-divider"></div>
@@ -439,7 +450,7 @@
       const btn       = document.getElementById('btn-checkout');
 
       if (cart.length === 0) {
-        container.innerHTML = '<div class="summary-empty">הסל ריק — חזור למוצרים</div>';
+        container.innerHTML = '<div class="summary-empty">הסל ריק</div>';
         document.getElementById('summary-price').textContent = '—';
         document.getElementById('summary-total').textContent = '—';
         document.getElementById('summary-shipping').textContent = '—';
@@ -499,7 +510,7 @@
       const street = document.getElementById('street').value.trim();
       const city   = document.getElementById('city').value.trim();
 
-      if (!fname || !lname || !email || !phone || !street || !city) {
+      if (!fname || !lname || !email || !phone || !street || !city || !document.getElementById('zip').value.trim()) {
         errorEl.textContent   = 'יש למלא את כל השדות הנדרשים.';
         errorEl.style.display = 'block';
         btn.disabled    = false;
@@ -517,7 +528,7 @@
               name:    fname + ' ' + lname,
               email:   email,
               phone:   phone,
-              address: street + ', ' + city
+              address: [street, city, document.getElementById('floor').value.trim() ? 'קומה ' + document.getElementById('floor').value.trim() : '', document.getElementById('apt').value.trim() ? 'דירה ' + document.getElementById('apt').value.trim() : '', document.getElementById('zip').value.trim()].filter(Boolean).join(', ')
             }
           })
         });

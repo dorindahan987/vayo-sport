@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>סטטוס הזמנה — VAYO</title>
+  <link rel="stylesheet" href="../css/style.css?v=14" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans+Hebrew:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    .status-wrap { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:120px 24px 80px; }
+    .status-box  { max-width:480px; width:100%; }
+
+    .status-eyebrow { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.1em; color:#6AEBD6; text-transform:uppercase; margin-bottom:10px; }
+    .status-title   { font-size:clamp(1.6rem,3.5vw,2rem); font-weight:700; color:#fff; letter-spacing:0.04em; text-transform:uppercase; margin:0 0 32px; }
+
+    .lookup-form .form-group { margin-bottom:16px; }
+    .lookup-form label { display:block; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.08em; color:#555; text-transform:uppercase; margin-bottom:8px; }
+    .lookup-form input { width:100%; background:#0d0d0d; border:1px solid #222; color:#e8e8e8; font-family:'Space Grotesk','IBM Plex Sans Hebrew',sans-serif; font-size:15px; padding:13px 16px; outline:none; transition:border-color 0.2s; box-sizing:border-box; }
+    .lookup-form input:focus { border-color:#6AEBD6; }
+    .btn-lookup { width:100%; padding:15px; background:#6AEBD6; color:#060606; font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; border:none; cursor:pointer; margin-top:8px; transition:opacity 0.2s; }
+    .btn-lookup:hover { opacity:0.88; }
+    .btn-lookup:disabled { opacity:0.4; cursor:not-allowed; }
+
+    .result { margin-top:32px; }
+    .result-hidden { display:none; }
+
+    .order-header { border-bottom:1px solid #1a1a1a; padding-bottom:20px; margin-bottom:24px; }
+    .order-num    { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.1em; color:#6AEBD6; text-transform:uppercase; margin-bottom:8px; }
+
+    .status-track { display:flex; align-items:center; gap:0; margin-bottom:28px; }
+    .track-step   { flex:1; text-align:center; }
+    .track-dot    { width:28px; height:28px; border-radius:50%; border:2px solid #222; background:#060606; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; }
+    .track-dot.done { border-color:#6AEBD6; background:rgba(106,235,214,0.1); }
+    .track-dot.active { border-color:#6AEBD6; background:#6AEBD6; }
+    .track-line   { flex:1; height:1px; background:#1a1a1a; align-self:center; margin-bottom:24px; }
+    .track-line.done { background:#6AEBD6; }
+    .track-label  { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.06em; color:#444; text-transform:uppercase; }
+    .track-label.done, .track-label.active { color:#6AEBD6; }
+
+    .detail-row   { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #111; font-size:13px; color:#666; }
+    .detail-row strong { color:#fff; }
+    .detail-row:last-child { border-bottom:none; }
+
+    .tracking-box { background:#0d0d0d; border:1px solid rgba(106,176,235,0.25); padding:16px 20px; margin:20px 0; }
+    .tracking-label { font-family:'Space Mono',monospace; font-size:10px; color:#6ab0eb; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+    .tracking-num   { font-family:'Space Mono',monospace; font-size:20px; font-weight:700; color:#fff; letter-spacing:0.1em; }
+
+    .error-msg { color:#eb6a6a; font-size:13px; margin-top:12px; display:none; }
+  </style>
+</head>
+<body>
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <nav>
+    <a href="../index.html" class="nav-logo"><img src="../images/vayo-logo.png" alt="VAYO" class="nav-logo-img" /></a>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn active" data-lang="he">HE</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="status-wrap">
+    <div class="status-box">
+      <div class="status-eyebrow">מעקב הזמנה</div>
+      <h1 class="status-title">בדיקת סטטוס</h1>
+
+      <div class="lookup-form">
+        <div class="form-group">
+          <label>מספר הזמנה</label>
+          <input type="text" id="inp-order" placeholder="לדוגמה: E6A5E02A" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label>כתובת מייל</label>
+          <input type="email" id="inp-email" placeholder="המייל שהזנת בהזמנה" />
+        </div>
+        <button class="btn-lookup" id="btn-lookup">בדיקת סטטוס</button>
+        <div class="error-msg" id="error-msg"></div>
+      </div>
+
+      <div class="result result-hidden" id="result">
+        <div class="order-header">
+          <div class="order-num" id="res-order-num"></div>
+          <div style="font-family:'Space Mono',monospace;font-size:10px;color:#333;" id="res-date"></div>
+        </div>
+
+        <div class="status-track">
+          <div class="track-step">
+            <div class="track-dot" id="dot-paid"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <div class="track-label" id="lbl-paid">שולם</div>
+          </div>
+          <div class="track-line" id="line-1"></div>
+          <div class="track-step">
+            <div class="track-dot" id="dot-processing"></div>
+            <div class="track-label" id="lbl-processing">בהכנה</div>
+          </div>
+          <div class="track-line" id="line-2"></div>
+          <div class="track-step">
+            <div class="track-dot" id="dot-shipped"></div>
+            <div class="track-label" id="lbl-shipped">נשלח</div>
+          </div>
+        </div>
+
+        <div id="tracking-block" style="display:none;">
+          <div class="tracking-box">
+            <div class="tracking-label" id="tracking-carrier">מספר מעקב</div>
+            <div class="tracking-num" id="tracking-num"></div>
+          </div>
+        </div>
+
+        <div id="details-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js?v=6"></script>
+  <script>
+    // Pre-fill from URL or sessionStorage
+    const p = new URLSearchParams(location.search);
+    const preOrder = p.get('order') || sessionStorage.getItem('vayo-order') || '';
+    if (preOrder) document.getElementById('inp-order').value = preOrder;
+
+    document.getElementById('btn-lookup').addEventListener('click', lookup);
+    document.getElementById('inp-email').addEventListener('keydown', e => { if (e.key === 'Enter') lookup(); });
+
+    async function lookup() {
+      const orderId = document.getElementById('inp-order').value.trim().toUpperCase();
+      const email   = document.getElementById('inp-email').value.trim().toLowerCase();
+      const errEl   = document.getElementById('error-msg');
+      const btn     = document.getElementById('btn-lookup');
+
+      errEl.style.display = 'none';
+      if (!orderId || !email) { errEl.textContent = 'יש למלא מספר הזמנה וכתובת מייל.'; errEl.style.display = 'block'; return; }
+
+      btn.disabled = true; btn.textContent = 'בודק...';
+
+      try {
+        const r = await fetch(`/api/order/status?order=${encodeURIComponent(orderId)}&email=${encodeURIComponent(email)}`);
+        const d = await r.json();
+
+        if (!r.ok || d.error) {
+          errEl.textContent = 'ההזמנה לא נמצאה. בדוק/י את מספר ההזמנה והמייל.';
+          errEl.style.display = 'block';
+          document.getElementById('result').classList.add('result-hidden');
+        } else {
+          showResult(d);
+        }
+      } catch {
+        errEl.textContent = 'שגיאת חיבור. נסה/י שוב.';
+        errEl.style.display = 'block';
+      }
+      btn.disabled = false; btn.textContent = 'בדיקת סטטוס';
+    }
+
+    function showResult(d) {
+      document.getElementById('res-order-num').textContent = 'הזמנה #' + d.id;
+      document.getElementById('res-date').textContent = d.created_at || '';
+      document.getElementById('result').classList.remove('result-hidden');
+
+      const isPaid     = ['paid','shipped'].includes(d.status);
+      const isShipped  = d.status === 'shipped';
+
+      // Track steps
+      const mark = (id, state) => {
+        document.getElementById(id).classList.toggle('done', state === 'done');
+        document.getElementById(id).classList.toggle('active', state === 'active');
+      };
+      const markLbl = (id, state) => {
+        document.getElementById(id).classList.toggle('done', state === 'done');
+        document.getElementById(id).classList.toggle('active', state === 'active');
+      };
+
+      mark('dot-paid', isPaid ? 'done' : 'active');      markLbl('lbl-paid', isPaid ? 'done' : 'active');
+      document.getElementById('line-1').classList.toggle('done', isShipped);
+      mark('dot-processing', isShipped ? 'done' : isPaid ? 'active' : ''); markLbl('lbl-processing', isShipped ? 'done' : isPaid ? 'active' : '');
+      document.getElementById('line-2').classList.toggle('done', isShipped);
+      mark('dot-shipped', isShipped ? 'active' : '');    markLbl('lbl-shipped', isShipped ? 'active' : '');
+
+      // Tracking
+      if (d.tracking) {
+        document.getElementById('tracking-carrier').textContent = (d.carrier ? d.carrier + ' - ' : '') + 'מספר מעקב';
+        document.getElementById('tracking-num').textContent = d.tracking;
+        document.getElementById('tracking-block').style.display = 'block';
+      } else {
+        document.getElementById('tracking-block').style.display = 'none';
+      }
+
+      // Details
+      const items = (d.items || []).map(i => `${i.name} ×${i.qty}`).join(', ');
+      const statusHe = {pending:'ממתין לאישור תשלום', paid:'שולם, בהכנה למשלוח', shipped:'נשלח', cancelled:'בוטל'}[d.status] || d.status;
+      document.getElementById('details-list').innerHTML = `
+        <div class="detail-row"><span>סטטוס</span><strong>${statusHe}</strong></div>
+        <div class="detail-row"><span>מוצרים</span><strong style="font-size:12px;">${items}</strong></div>
+        <div class="detail-row"><span>סה"כ</span><strong>${d.total} ₪</strong></div>
+        ${d.shipped_at ? `<div class="detail-row"><span>תאריך משלוח</span><strong>${d.shipped_at}</strong></div>` : ''}
+      `;
+    }
+  </script>
+</body>
+</html>
