@@ -140,7 +140,7 @@
 
       <div class="success-actions">
         <a href="../index.html" class="btn-success-primary">חזרה לאתר</a>
-        <a href="../index.html#products" class="btn-success-outline">מוצרים נוספים</a>
+        <a id="status-link" href="order-status.html" class="btn-success-outline">בדיקת סטטוס הזמנה</a>
       </div>
 
     </div>
@@ -155,12 +155,17 @@
     if (orderId) {
       document.getElementById('order-id-box').style.display = 'inline-block';
       document.getElementById('order-id-box').textContent = 'הזמנה #' + orderId;
+      // Update desc to mention email
+      const descEl = document.querySelector('.success-desc');
+      if (descEl) descEl.innerHTML = 'שלחנו אליך אישור למייל עם פרטי ההזמנה.<br>המלאי הראשון כבר בדרך אלינו. נשלח לך ישירות ברגע שיגיע למחסן.';
 
       // Call confirm endpoint (sends emails, marks paid)
       fetch('/api/payment/confirm?order=' + encodeURIComponent(orderId))
         .then(() => {
           sessionStorage.removeItem('vayo-order');
           localStorage.removeItem('vayo-cart');
+          const sl = document.getElementById('status-link');
+          if (sl) sl.href = 'order-status.html?order=' + orderId;
         })
         .catch(() => {});
     } else {

@@ -652,6 +652,13 @@ def send_order_email_customer(order):
     <p style="margin:0 0 6px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.1em;color:#444;text-transform:uppercase;">כתובת למשלוח</p>
     <p style="margin:0;font-size:14px;color:#888;">{c.get('address','')}</p>
   </td></tr>
+  <tr><td style="padding:0 40px 32px;" dir="rtl">
+    <p style="margin:0 0 14px;font-size:13px;color:#555;">האישור נשלח לכתובת המייל שלך. לבדיקת סטטוס ההזמנה בכל עת:</p>
+    <a href="https://www.vayo-sport.com/pages/order-status.html?order={order['id']}"
+       style="display:inline-block;padding:12px 24px;background:transparent;border:1px solid #6AEBD6;color:#6AEBD6;font-family:'Courier New',monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-decoration:none;text-transform:uppercase;">
+      בדיקת סטטוס הזמנה
+    </a>
+  </td></tr>
   <tr><td style="padding:20px 40px;border-top:1px solid #1a1a1a;background:#0a0a0a;">
     <table width="100%" cellpadding="0" cellspacing="0"><tr>
       <td style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.08em;color:#333;text-transform:uppercase;">VAYO &nbsp;·&nbsp; Engineered for Padel</td>
