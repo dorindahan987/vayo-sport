@@ -19,6 +19,9 @@ PRICE_MAP = {
     'serum-50':        69,
     'serum-100':      109,
     'frame-protector': 45,
+    'hat-black':        119,
+    'hat-white':        119,
+    'hat-green':        119,
 }
 
 SHIPPING     = 30

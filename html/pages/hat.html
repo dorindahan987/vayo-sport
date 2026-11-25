@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VAYO Cap — כובע פאדל</title>
+  <link rel="stylesheet" href="../css/style.css?v=15" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans+Hebrew:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1798460304676639');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1798460304676639&ev=PageView&noscript=1"/></noscript>
+  <style>
+    .color-btns { display: flex; gap: 10px; margin-top: 0.5rem; }
+    .color-btn {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2px solid transparent; cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      position: relative;
+    }
+    .color-btn.active, .color-btn:hover { border-color: var(--teal); transform: scale(1.1); }
+    .color-btn.black  { background: #111; }
+    .color-btn.white  { background: #f0f0f0; border: 2px solid #bbb; }
+    .color-btn.green  { background: #2d6a3f; }
+    .color-name-lbl {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal); margin-top: 6px;
+    }
+    .hat-thumbs { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .hat-thumb {
+      width: 64px; height: 64px; object-fit: cover; cursor: pointer;
+      border: 1px solid var(--border); opacity: 0.6; transition: all 0.2s;
+    }
+    .hat-thumb.active, .hat-thumb:hover { opacity: 1; border-color: var(--teal); }
+  </style>
+</head>
+<body>
+
+<script src="../js/cart.js?v=3"></script>
+
+<!-- NAV -->
+<nav class="nav" id="main-nav">
+  <div class="nav-inner">
+    <button class="cart-btn" id="cart-btn" aria-label="Cart">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-count" id="cart-count" style="display:none">0</span>
+    </button>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-he" onclick="setLang('he')">HE</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+    <div class="nav-links">
+      <a href="../index.html#products" data-i18n="nav_products">מוצרים</a>
+      <a href="../index.html#about" data-i18n="nav_about">אודות</a>
+      <a href="../index.html#contact" data-i18n="nav_contact">צור קשר</a>
+      <a href="/padel/" class="nav-game-link" data-i18n="nav_game">משחק</a>
+    </div>
+    <a href="../index.html" class="nav-logo">VAYO</a>
+  </div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<section class="prod-hero">
+  <div class="prod-visual-col">
+    <img id="hat-img" src="../images/products/hat-black.png" alt="VAYO Cap" style="width:100%;height:100%;object-fit:cover;" />
+  </div>
+  <div class="prod-info-col">
+    <div class="prod-eyebrow mono-el">N / SERIES 04</div>
+    <h1 class="prod-name" data-i18n="h_name">VAYO Cap</h1>
+    <div class="prod-subtitle mono-el" data-i18n="h_sub">Performance Padel Cap</div>
+    <p class="prod-desc" data-i18n="h_desc">כובע מצחייה מקצועי לפאדל. עיצוב נקי, לוגו VAYO, מתאים לכל מזג אוויר.</p>
+
+    <div class="pack-label-txt mono-el" style="margin-top:1.5rem;">צבע</div>
+    <div class="color-btns">
+      <button class="color-btn black active" data-color="black" onclick="selectColor('black')" title="שחור"></button>
+      <button class="color-btn white" data-color="white" onclick="selectColor('white')" title="לבן"></button>
+      <button class="color-btn green" data-color="green" onclick="selectColor('green')" title="ירוק"></button>
+    </div>
+    <div class="color-name-lbl" id="color-lbl">שחור</div>
+
+    <div class="hat-thumbs" id="hat-thumbs"></div>
+
+    <div class="sr-price-row" style="margin-top:1.5rem;">
+      <span class="sr-launch-price">119 ₪</span>
+    </div>
+
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:1.5rem;">
+      <button class="btn-preorder" id="btn-add-cart" onclick="addToCart()">הוסף לסל - רכישה מוקדמת</button>
+      <a href="checkout.html" class="btn-reserve" id="btn-checkout" style="display:none;">לתשלום</a>
+    </div>
+    <p class="prod-microcopy" style="margin-top:0.75rem;" data-i18n="h_micro">הדרופ הראשון קרוב - משלוח ישיר עם הגעת הסחורה - תשלום מאובטח</p>
+
+    <a href="../index.html" class="checkout-back" style="margin-top:2rem;display:inline-block;">→ חזרה למוצרים</a>
+  </div>
+</section>
+
+<script>
+const colorData = {
+  black: {
+    label: 'שחור',
+    main: '../images/products/hat-black.png',
+    thumbs: ['../images/products/hat-black.png','../images/products/hat-black-2.png','../images/products/hat-black-3.png'],
+    ext: 'png'
+  },
+  white: {
+    label: 'לבן',
+    main: '../images/products/hat-white.png',
+    thumbs: ['../images/products/hat-white.png','../images/products/hat-white-2.png','../images/products/hat-white-3.png'],
+    ext: 'png'
+  },
+  green: {
+    label: 'ירוק',
+    main: '../images/products/hat-green.jpg',
+    thumbs: ['../images/products/hat-green.jpg','../images/products/hat-green-2.jpg','../images/products/hat-green-3.jpg'],
+    ext: 'jpg'
+  }
+};
+
+let selectedColor = 'black';
+
+function selectColor(color) {
+  selectedColor = color;
+  const d = colorData[color];
+  document.getElementById('hat-img').src = d.main;
+  document.getElementById('color-lbl').textContent = d.label;
+  document.querySelectorAll('.color-btn').forEach(b => b.classList.toggle('active', b.dataset.color === color));
+  renderThumbs(color);
+}
+
+function renderThumbs(color) {
+  const d = colorData[color];
+  const container = document.getElementById('hat-thumbs');
+  container.innerHTML = d.thumbs.map((src, i) =>
+    `<img class="hat-thumb${i===0?' active':''}" src="${src}" onclick="setMainImg(this, '${src}')" />`
+  ).join('');
+}
+
+function setMainImg(el, src) {
+  document.getElementById('hat-img').src = src;
+  document.querySelectorAll('.hat-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function addToCart() {
+  const d = colorData[selectedColor];
+  if (window.VayoCart) {
+    VayoCart.add({
+      id: 'hat-' + selectedColor,
+      name: 'VAYO Cap',
+      variant: d.label + ' - משלוח ינואר',
+      price: 119,
+      img: d.main
+    });
+    const btn = document.getElementById('btn-checkout');
+    if (btn) btn.style.display = 'inline-block';
+  }
+}
+
+// Init
+selectColor('black');
+
+// Lang
+const i18n = {
+  en: { h_name:'VAYO Cap', h_sub:'Performance Padel Cap', h_desc:'Professional padel cap. Clean design, VAYO logo, all-weather fit.', h_micro:'First drop coming soon - ships upon arrival - secure payment', nav_products:'Products', nav_about:'About', nav_contact:'Contact', nav_game:'Game' },
+  he: { h_name:'VAYO Cap', h_sub:'כובע פאדל מקצועי', h_desc:'כובע מצחייה מקצועי לפאדל. עיצוב נקי, לוגו VAYO, מתאים לכל מזג אוויר.', h_micro:'הדרופ הראשון קרוב - משלוח ישיר עם הגעת הסחורה - תשלום מאובטח', nav_products:'מוצרים', nav_about:'אודות', nav_contact:'צור קשר', nav_game:'משחק' }
+};
+function setLang(lang) {
+  const t = i18n[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => { if (t[el.dataset.i18n]) el.textContent = t[el.dataset.i18n]; });
+  document.getElementById('btn-he').classList.toggle('active', lang==='he');
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  localStorage.setItem('vayo-lang', lang);
+}
+const savedLang = localStorage.getItem('vayo-lang') || 'he';
+setLang(savedLang);
+
+// Cart count
+function updateCartCount() {
+  const cart = JSON.parse(localStorage.getItem('vayo-cart') || '[]');
+  const total = cart.reduce((s,i) => s + (i.qty||1), 0);
+  const el = document.getElementById('cart-count');
+  if (el) { el.textContent = total; el.style.display = total ? 'flex' : 'none'; }
+}
+document.getElementById('cart-btn')?.addEventListener('click', () => window.VayoCart?.open());
+updateCartCount();
+window.addEventListener('storage', updateCartCount);
+</script>
+
+</body>
+</html>
