@@ -481,10 +481,8 @@ nav.scrolled {
 .products-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  gap: 20px;
+  padding: 0 2rem 2rem;
 }
 
 .pcard {
