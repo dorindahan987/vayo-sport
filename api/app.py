@@ -13,12 +13,12 @@ MORNING_CLIENT_SECRET = 'g-2TGn:UA!y5B7Pu0^7OhJ{3]YsyS@1-'
 MORNING_PLUGIN_ID     = '06061227-8a07-454f-93a5-2a47353617d2'
 
 PRICE_MAP = {
-    'grip-3':          28,
-    'grip-12':         70,
-    'grip-30':        140,
+    'grip-3':          45,
+    'grip-15':        150,
+    'grip-30':        350,
     'serum-50':        69,
     'serum-100':      109,
-    'frame-protector': 35,
+    'frame-protector': 45,
 }
 
 SHIPPING     = 30

@@ -78,9 +78,9 @@
 
       <div class="pack-label-txt mono-el" data-i18n="pack_lbl">Select Pack</div>
       <div class="pack-btns">
-        <button class="pack-btn active mono-el" data-i18n="pk_3" data-price="28" data-pack="3">×03 Grips · 28 ₪</button>
-        <button class="pack-btn mono-el" data-i18n="pk_12" data-price="70" data-pack="12">×12 Grips · 70 ₪</button>
-        <button class="pack-btn mono-el" data-i18n="pk_30" data-price="140" data-pack="30">×30 Grips · 140 ₪</button>
+        <button class="pack-btn active mono-el" data-i18n="pk_3" data-price="45" data-pack="3">×03 Grips · 45 ₪</button>
+        <button class="pack-btn mono-el" data-i18n="pk_12" data-price="150" data-pack="15">×15 Grips · 150 ₪</button>
+        <button class="pack-btn mono-el" data-i18n="pk_30" data-price="350" data-pack="30">×30 Grips · 350 ₪</button>
       </div>
 
       <div class="prod-specs-grid">
@@ -104,8 +104,9 @@
 
       <!-- PRICE DISPLAY -->
       <div class="sr-price-row">
-        <span class="sr-launch-price" id="g-price">28 ₪</span>
+        <span class="sr-launch-price" id="g-price">45 ₪</span>
         <span class="sr-launch-tag mono-el" id="g-price-tag">מחיר השקה</span>
+        <span class="sr-per-unit mono-el" id="g-per-unit" style="font-size:12px;color:var(--teal);opacity:0.8;">15 ₪ ליחידה</span>
       </div>
 
       <!-- BUTTONS -->
@@ -155,9 +156,9 @@
           <div class="sr-field">
             <label class="sr-label" id="lbl-pack">חבילה</label>
             <div class="sr-modal-pills" id="mpills-pack">
-              <button type="button" class="sr-modal-pill active" data-pack="3" data-price="28" id="mpill-3">×03 גריפים – 28 ₪</button>
-              <button type="button" class="sr-modal-pill" data-pack="12" data-price="70" id="mpill-12">×12 גריפים – 70 ₪</button>
-              <button type="button" class="sr-modal-pill" data-pack="30" data-price="140" id="mpill-30">×30 גריפים – 140 ₪</button>
+              <button type="button" class="sr-modal-pill active" data-pack="3" data-price="45" id="mpill-3">×03 גריפים – 45 ₪  ·  15 ₪ ליח'</button>
+              <button type="button" class="sr-modal-pill" data-pack="15" data-price="150" id="mpill-15">×15 גריפים – 150 ₪  ·  10 ₪ ליח'</button>
+              <button type="button" class="sr-modal-pill" data-pack="30" data-price="350" id="mpill-30">×30 גריפים – 350 ₪  ·  11.7 ₪ ליח'</button>
             </div>
           </div>
           <button type="submit" class="btn-reserve-submit" id="sr-submit">שריינו לי גריפ במחיר השקה</button>
@@ -319,7 +320,7 @@
         sk_mat:"Material", sv_mat:"Dry", sv_mat_dry:"Dry", sv_mat_tacky:"Tacky",
         sk_thick:"Thickness", sk_orig:"Origin", sv_orig:"Made in IL",
         type_lbl:"Select Type",
-        pack_lbl:"Select Pack", pk_3:"×03 Grips", pk_12:"×12 Grips", pk_30:"×30 Grips",
+        pack_lbl:"Select Pack", pk_3:"×03 Grips", pk_15:"×15 Grips", pk_30:"×30 Grips",
         btn_back:"← All Products",
         footer_sub:"Engineered for Padel", f_products:"Products", f_about:"About", f_contact:"Contact",
         footer_copy:"© 2026 VAYO · ALL RIGHTS RESERVED",
@@ -332,7 +333,7 @@
         sk_mat:"חומר", sv_mat:"יבש", sv_mat_dry:"יבש", sv_mat_tacky:"דביק",
         sk_thick:"עובי", sk_orig:"מקור", sv_orig:"ייצור ישראלי",
         type_lbl:"בחר סוג",
-        pack_lbl:"בחר חבילה", pk_3:"×03 גריפים", pk_12:"×12 גריפים", pk_30:"×30 גריפים",
+        pack_lbl:"בחר חבילה", pk_3:"×03 גריפים", pk_15:"×15 גריפים", pk_30:"×30 גריפים",
         btn_back:"← כל המוצרים",
         footer_sub:"מתוכנן לפאדל", f_products:"מוצרים", f_about:"אודות", f_contact:"צור קשר",
         footer_copy:"© 2026 VAYO · כל הזכויות שמורות",
@@ -350,7 +351,7 @@
         lblName: 'Full Name *', lblPhone: 'Phone / WhatsApp *', lblEmail: 'Email *',
         lblType: 'Grip Type', lblPack: 'Pack Size',
         mpillDry: 'DRY', mpillTacky: 'TACKY',
-        mpill3: '×03 Grips – ₪28', mpill12: '×12 Grips – ₪70', mpill30: '×30 Grips – ₪140',
+        mpill3: '×03 Grips – ₪28', mpill15: '×15 Grips – ₪150 · 10 ₪/unit', mpill30: '×30 Grips – ₪140',
         submitBtn: 'Reserve at Launch Price',
         successTitle: 'Your grip has been reserved!',
         successMsg: 'No payment needed now. We\'ll update you on WhatsApp the moment the stock arrives with your discounted order link.',
@@ -365,7 +366,7 @@
         lblName: 'שם מלא *', lblPhone: 'טלפון / וואטסאפ *', lblEmail: 'אימייל *',
         lblType: 'סוג גריפ', lblPack: 'חבילה',
         mpillDry: 'DRY', mpillTacky: 'TACKY',
-        mpill3: '×03 גריפים – 28 ₪', mpill12: '×12 גריפים – 70 ₪', mpill30: '×30 גריפים – 140 ₪',
+        mpill3: '×03 גריפים – 28 ₪', mpill15: '×15 גריפים – 150 ₪  ·  10 ₪ ליח\', mpill30: '×30 גריפים – 140 ₪',
         submitBtn: 'שריינו לי גריפ במחיר השקה',
         successTitle: 'הגריפ שלך שוריין בהצלחה!',
         successMsg: 'אין צורך לשלם כרגע. נעדכן אותך בוואטסאפ ברגע שהמלאי יתחדש עם הלינק להזמנה במחיר המוזל.',
@@ -378,8 +379,8 @@
         'default':    '../images/products/grip-general-h.jpg',
         'dry-3':      '../images/products/grip-dry-3-h.jpg',
         'tacky-3':    '../images/products/grip-tacky-3-h.jpg',
-        'dry-12':     '../images/products/grip-dry-12-h.jpg',
-        'tacky-12':   '../images/products/grip-tacky-12-h.jpg',
+        'dry-15':     '../images/products/grip-dry-12-h.jpg',
+        'tacky-15':   '../images/products/grip-tacky-12-h.jpg',
         'dry-30':     '../images/products/grip-dry-30-h.jpg',
         'tacky-30':   '../images/products/grip-tacky-30-h.jpg',
       },
@@ -387,8 +388,8 @@
         'default':    '../images/products/grip-general.jpg',
         'dry-3':      '../images/products/grip-dry-3.jpg',
         'tacky-3':    '../images/products/grip-tacky-3.jpg',
-        'dry-12':     '../images/products/grip-dry-12.jpg',
-        'tacky-12':   '../images/products/grip-tacky-12.jpg',
+        'dry-15':     '../images/products/grip-dry-12.jpg',
+        'tacky-15':   '../images/products/grip-tacky-12.jpg',
         'dry-30':     '../images/products/grip-dry-30.jpg',
         'tacky-30':   '../images/products/grip-tacky-30.jpg',
       }
@@ -396,7 +397,7 @@
 
     let selectedType = 'DRY';
     let selectedPack = '3';
-    const packPrices = { '3': 28, '12': 70, '30': 140 };
+    const packPrices = { '3': 45, '15': 150, '30': 350 };
 
     function applyReserveT(lang) {
       const t = reserveT[lang] || reserveT.he;
@@ -414,7 +415,7 @@
       if ($('mpill-dry'))      $('mpill-dry').textContent     = t.mpillDry;
       if ($('mpill-tacky'))    $('mpill-tacky').textContent   = t.mpillTacky;
       if ($('mpill-3'))        $('mpill-3').textContent       = t.mpill3;
-      if ($('mpill-12'))       $('mpill-12').textContent      = t.mpill12;
+      if ($('mpill-15'))       $('mpill-15').textContent      = t.mpill15;
       if ($('mpill-30'))       $('mpill-30').textContent      = t.mpill30;
       if ($('sr-submit'))      $('sr-submit').textContent     = t.submitBtn;
       if ($('sr-success-title')) $('sr-success-title').textContent = t.successTitle;
@@ -428,7 +429,7 @@
       selectedPack = activePack?.dataset.pack || '3';
       const type = selectedType.toLowerCase();
       const packText = activePack ? (activePack.getAttribute('data-i18n') || '') : '';
-      const key = packText === 'pk_30' ? type + '-30' : packText === 'pk_12' ? type + '-12' : packText === 'pk_3' ? type + '-3' : 'default';
+      const key = packText === 'pk_30' ? type + '-30' : packText === 'pk_15' ? type + '-15' : packText === 'pk_3' ? type + '-3' : 'default';
       const map = window.innerWidth <= 768 ? imgMap.mobile : imgMap.desktop;
       const img = document.getElementById('grip-img');
       if (img) {
@@ -442,7 +443,10 @@
       }
       // Update price display
       const priceEl = document.getElementById('g-price');
-      if (priceEl) priceEl.textContent = (packPrices[selectedPack] || 28) + ' ₪';
+      if (priceEl) priceEl.textContent = (packPrices[selectedPack] || 45) + ' ₪';
+      const perUnit = { '3': '15', '15': '10', '30': '11.7' };
+      const puEl = document.getElementById('g-per-unit');
+      if (puEl) puEl.textContent = (perUnit[selectedPack] || '') + ' ₪ ליחידה';
       // Sync modal pills
       syncModalType(selectedType);
       syncModalPack(selectedPack);
@@ -582,7 +586,7 @@
         const activePack = document.querySelector('.pack-btns:not(.type-btns) .pack-btn.active');
         const activeType = document.querySelector('.type-btns .pack-btn.active');
         const pack  = activePack ? activePack.dataset.pack  : '3';
-        const price = activePack ? parseInt(activePack.dataset.price) : 28;
+        const price = activePack ? parseInt(activePack.dataset.price) : 45;
         const type  = activeType ? activeType.textContent.trim() : 'DRY';
         const img   = document.getElementById('grip-img') ? document.getElementById('grip-img').src : '../images/products/grip-general-h.jpg';
         if (window.VayoCart) {
