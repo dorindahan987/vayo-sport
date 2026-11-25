@@ -477,6 +477,117 @@ nav.scrolled {
   text-transform: uppercase;
 }
 
+/* ── Product Cards Grid ── */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.pcard {
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+  text-decoration: none;
+  color: inherit;
+}
+.pcard:hover { background: var(--dark); }
+
+.pcard-img {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--card);
+}
+.pcard-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.pcard:hover .pcard-img img { transform: scale(1.06); }
+
+.pcard-num {
+  position: absolute;
+  bottom: 1rem; right: 1rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.25);
+}
+
+.pcard-badge {
+  position: absolute;
+  top: 1rem; left: 1rem;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(106,235,214,0.4);
+  color: var(--teal);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+  backdrop-filter: blur(4px);
+}
+
+.pcard-info {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  border-top: 1px solid var(--border);
+}
+
+.pcard-series {
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.pcard-name {
+  font-size: clamp(1.3rem, 1.8vw, 2rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--white);
+}
+
+.pcard-sub {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-top: 0.1rem;
+}
+
+.pcard-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--white);
+  transition: gap 0.25s;
+}
+.pcard:hover .pcard-link { gap: 1rem; color: var(--teal); }
+.pcard:hover .pcard-link svg { stroke: var(--teal); }
+
+@media (max-width: 768px) {
+  .products-grid { grid-template-columns: 1fr; gap: 1px; }
+  .pcard-img { aspect-ratio: 4 / 3; }
+}
+
 /* Product Row */
 .product-row {
   display: grid;
