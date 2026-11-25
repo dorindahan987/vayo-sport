@@ -78,9 +78,9 @@
 
       <div class="pack-label-txt mono-el" data-i18n="pack_lbl">Select Pack</div>
       <div class="pack-btns">
-        <button class="pack-btn active mono-el" data-i18n="pk_3" data-price="45" data-pack="3">×03 Grips · 45 ₪</button>
-        <button class="pack-btn mono-el" data-i18n="pk_12" data-price="150" data-pack="15">×15 Grips · 150 ₪</button>
-        <button class="pack-btn mono-el" data-i18n="pk_30" data-price="350" data-pack="30">×30 Grips · 350 ₪</button>
+        <button class="pack-btn active mono-el" data-i18n="pk_3" data-price="45" data-pack="3">×03 Grips</button>
+        <button class="pack-btn mono-el" data-i18n="pk_15" data-price="150" data-pack="15">×15 Grips</button>
+        <button class="pack-btn mono-el" data-i18n="pk_30" data-price="350" data-pack="30">×30 Grips</button>
       </div>
 
       <div class="prod-specs-grid">
@@ -106,7 +106,6 @@
       <div class="sr-price-row">
         <span class="sr-launch-price" id="g-price">45 ₪</span>
         <span class="sr-launch-tag mono-el" id="g-price-tag">מחיר השקה</span>
-        <span class="sr-per-unit mono-el" id="g-per-unit" style="font-size:12px;color:var(--teal);opacity:0.8;">15 ₪ ליחידה</span>
       </div>
 
       <!-- BUTTONS -->
@@ -156,9 +155,9 @@
           <div class="sr-field">
             <label class="sr-label" id="lbl-pack">חבילה</label>
             <div class="sr-modal-pills" id="mpills-pack">
-              <button type="button" class="sr-modal-pill active" data-pack="3" data-price="45" id="mpill-3">×03 גריפים – 45 ₪  ·  15 ₪ ליח'</button>
-              <button type="button" class="sr-modal-pill" data-pack="15" data-price="150" id="mpill-15">×15 גריפים – 150 ₪  ·  10 ₪ ליח'</button>
-              <button type="button" class="sr-modal-pill" data-pack="30" data-price="350" id="mpill-30">×30 גריפים – 350 ₪  ·  11.7 ₪ ליח'</button>
+              <button type="button" class="sr-modal-pill active" data-pack="3" data-price="45" id="mpill-3">×03 גריפים – 45 ₪</button>
+              <button type="button" class="sr-modal-pill" data-pack="15" data-price="150" id="mpill-15">×15 גריפים – 150 ₪</button>
+              <button type="button" class="sr-modal-pill" data-pack="30" data-price="350" id="mpill-30">×30 גריפים – 350 ₪</button>
             </div>
           </div>
           <button type="submit" class="btn-reserve-submit" id="sr-submit">שריינו לי גריפ במחיר השקה</button>
@@ -351,7 +350,7 @@
         lblName: 'Full Name *', lblPhone: 'Phone / WhatsApp *', lblEmail: 'Email *',
         lblType: 'Grip Type', lblPack: 'Pack Size',
         mpillDry: 'DRY', mpillTacky: 'TACKY',
-        mpill3: '×03 Grips – ₪28', mpill15: '×15 Grips – ₪150 · 10 ₪/unit', mpill30: '×30 Grips – ₪140',
+        mpill3: '×03 Grips – ₪28', mpill15: '×15 Grips – ₪150', mpill30: '×30 Grips – ₪140',
         submitBtn: 'Reserve at Launch Price',
         successTitle: 'Your grip has been reserved!',
         successMsg: 'No payment needed now. We\'ll update you on WhatsApp the moment the stock arrives with your discounted order link.',
@@ -366,7 +365,7 @@
         lblName: 'שם מלא *', lblPhone: 'טלפון / וואטסאפ *', lblEmail: 'אימייל *',
         lblType: 'סוג גריפ', lblPack: 'חבילה',
         mpillDry: 'DRY', mpillTacky: 'TACKY',
-        mpill3: '×03 גריפים – 28 ₪', mpill15: '×15 גריפים – 150 ₪  ·  10 ₪ ליח\', mpill30: '×30 גריפים – 140 ₪',
+        mpill3: '×03 גריפים – 28 ₪', mpill15: '×15 גריפים – 150 ₪', mpill30: '×30 גריפים – 140 ₪',
         submitBtn: 'שריינו לי גריפ במחיר השקה',
         successTitle: 'הגריפ שלך שוריין בהצלחה!',
         successMsg: 'אין צורך לשלם כרגע. נעדכן אותך בוואטסאפ ברגע שהמלאי יתחדש עם הלינק להזמנה במחיר המוזל.',
@@ -444,9 +443,6 @@
       // Update price display
       const priceEl = document.getElementById('g-price');
       if (priceEl) priceEl.textContent = (packPrices[selectedPack] || 45) + ' ₪';
-      const perUnit = { '3': '15', '15': '10', '30': '11.7' };
-      const puEl = document.getElementById('g-per-unit');
-      if (puEl) puEl.textContent = (perUnit[selectedPack] || '') + ' ₪ ליחידה';
       // Sync modal pills
       syncModalType(selectedType);
       syncModalPack(selectedPack);
