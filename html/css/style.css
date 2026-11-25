@@ -561,7 +561,7 @@ nav.scrolled {
   background: var(--teal);
 }
 .product-name-large {
-  font-size: clamp(1.4rem, 2.2vw, 2.4rem);
+  font-size: clamp(2.2rem, 3.5vw, 4rem);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.02em;
@@ -577,9 +577,9 @@ nav.scrolled {
   font-family: var(--mono);
 }
 .product-desc {
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   color: var(--gray);
-  line-height: 1.6;
+  line-height: 1.75;
   max-width: 380px;
   margin-bottom: 0.75rem;
 }
